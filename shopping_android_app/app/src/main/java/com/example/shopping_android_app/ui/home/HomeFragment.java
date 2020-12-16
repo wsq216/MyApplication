@@ -13,23 +13,34 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.shopping_android_app.R;
+import com.example.shopping_android_app.base.BaseFragment;
+import com.example.shopping_android_app.base.BasePresenter;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends BaseFragment {
 
-    private HomeViewModel homeViewModel;
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        homeViewModel =
-                ViewModelProviders.of(this).get(HomeViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_home, container, false);
-        final TextView textView = root.findViewById(R.id.text_home);
-        homeViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
-        return root;
+    @Override
+    protected BasePresenter createPersenter() {
+        return null;
+    }
+
+    @Override
+    protected void initData() {
+
+    }
+
+    @Override
+    protected void initView() {
+
+    }
+
+    @Override
+    protected int getLayout() {
+        return R.layout.fragment_home;
+    }
+
+    @Override
+    public void fila(String error) {
+
     }
 }
