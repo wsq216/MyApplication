@@ -125,6 +125,7 @@ public class HotGoodActivity extends BaseActivity<IHotGood.Presenter> implements
     private void newPop() {
         inflate = LayoutInflater.from(this).inflate(R.layout.hot_pop, null);
 
+
         popupWindow = new PopupWindow(inflate, ViewGroup.LayoutParams.MATCH_PARENT, 300);
         popupWindow.setAttachedInDecor(true);
 

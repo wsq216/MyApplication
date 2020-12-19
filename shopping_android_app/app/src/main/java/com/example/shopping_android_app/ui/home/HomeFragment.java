@@ -22,6 +22,7 @@ import com.example.shopping_android_app.adapter.CategoryListAdapter;
 import com.example.shopping_android_app.adapter.HotGoodsAdapter;
 import com.example.shopping_android_app.adapter.NewGoodsListAdapter;
 import com.example.shopping_android_app.adapter.TopicListAdapter;
+import com.example.shopping_android_app.base.BaseAdapter;
 import com.example.shopping_android_app.base.BaseFragment;
 import com.example.shopping_android_app.interfaces.home.IHome;
 import com.example.shopping_android_app.model.home.CategoryBean;
@@ -30,6 +31,7 @@ import com.example.shopping_android_app.model.home.HomeBean;
 import com.example.shopping_android_app.presenter.home.HomePresenter;
 import com.example.shopping_android_app.ui.channel.CategoryActivity;
 import com.example.shopping_android_app.ui.dashboard.BrandActivity;
+import com.example.shopping_android_app.ui.details.CarActivity;
 import com.youth.banner.Banner;
 import com.youth.banner.loader.ImageLoader;
 
@@ -152,7 +154,18 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements IHome.V
             recy_home.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
             CategoryListAdapter categoryListAdapter = new CategoryListAdapter(getActivity(), goodsList1);
             recy_home.setAdapter(categoryListAdapter);
+            view.setTag(goodsList1);
             linesr.addView(view);
+            categoryListAdapter.addListClick(new BaseAdapter.IListClick() {
+                @Override
+                public void itemClick(int pos) {
+                    List<HomeBean.DataBean.CategoryListBean.GoodsListBean> goodsListBeans= (List<HomeBean.DataBean.CategoryListBean.GoodsListBean>) view.getTag();
+                    HomeBean.DataBean.CategoryListBean.GoodsListBean goodsListBean = goodsListBeans.get(pos);
+                    Intent intent = new Intent(getActivity(), CarActivity.class);
+                    intent.putExtra("id",goodsListBean.getId());
+                    startActivity(intent);
+                }
+            });
         }
 
     }

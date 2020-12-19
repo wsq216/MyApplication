@@ -2,6 +2,9 @@
 
 <resources>
 
+    <dimen name="common_margin">@dimen/dp_15</dimen>
+    <dimen name="car_banner_height">@dimen/dp_200</dimen>
+
     <!-- Default screen margins, per the Android Design guidelines. -->
 
 

@@ -9,6 +9,8 @@ import com.example.shopping_android_app.model.home.CategoryListBean;
 import com.example.shopping_android_app.model.home.HomeBean;
 import com.example.shopping_android_app.model.home.HotBase;
 import com.example.shopping_android_app.model.home.HotGoodListBean;
+import com.example.shopping_android_app.model.home.details.DetailsBase;
+import com.example.shopping_android_app.model.home.details.RelatedBase;
 
 import java.util.HashMap;
 
@@ -61,6 +63,19 @@ public interface ShopApi {
     //https://cdplay.cn/api/goods/list?isNew=1&page=1&size =1000&order=asc&sort=default&categoryId=0
     @GET("api/goods/list?")
     Flowable<HotGoodListBean> getHotGoodList(@QueryMap HashMap<String, String> map);
+
+
+    //https://cdplay.cn/api/goods/detail?id=1009024
+    //商品购买详情页
+    @GET("api/goods/detail?")
+    Flowable<DetailsBase> getDetails(@Query("id") int id);
+
+    //https://cdplay.cn/api/goods/related?id=1009024
+    //商品购买详情页底部商品列表数据
+    @GET("api/goods/related?")
+    Flowable<RelatedBase> getRelated(@Query("id") int id);
+
+
 
 
 }
