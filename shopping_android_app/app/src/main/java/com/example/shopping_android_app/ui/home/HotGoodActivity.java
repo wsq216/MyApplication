@@ -2,7 +2,7 @@ package com.example.shopping_android_app.ui.home;
 
 import android.annotation.SuppressLint;
 import android.graphics.Color;
-import android.os.Bundle;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +12,6 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
@@ -31,7 +30,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class HotGoodActivity extends BaseActivity<IHotGood.Presenter> implements IHotGood.View, View.OnClickListener {
@@ -74,12 +72,13 @@ public class HotGoodActivity extends BaseActivity<IHotGood.Presenter> implements
     private HotGoodAdapter hotGoodAdapter;
     private PopupWindow popupWindow;
     private List<HotGoodListBean.DataBeanX.FilterCategoryBean> filterCategory;
-    private TextView mName1Tv;
-    private TextView mName2Tv;
-    private TextView mName3Tv;
-    private TextView mName4Tv;
-    private TextView mName5Tv;
-    private TextView mName6Tv;
+    private TextView mAll;
+    private TextView mHome;
+    private TextView mDinner;
+    private TextView mChider;
+    private TextView mCargo;
+    private TextView mDiet;
+    private View inflate;
 
 
     @Override
@@ -119,6 +118,16 @@ public class HotGoodActivity extends BaseActivity<IHotGood.Presenter> implements
 
         presenter.getHotGood(getParam());
         presenter.getHot();
+
+        newPop();
+    }
+
+    private void newPop() {
+        inflate = LayoutInflater.from(this).inflate(R.layout.hot_pop, null);
+
+        popupWindow = new PopupWindow(inflate, ViewGroup.LayoutParams.MATCH_PARENT, 300);
+        popupWindow.setAttachedInDecor(true);
+
     }
 
     @SuppressLint("ResourceType")
@@ -149,7 +158,6 @@ public class HotGoodActivity extends BaseActivity<IHotGood.Presenter> implements
                 resetPriceState();
                 txtAll.setTextColor(Color.parseColor(HotGoodActivity.this.getString(R.color.red)));
                 sort = DEFAULT;
-                categoryId = 0;
                 presenter.getHotGood(getParam());
                 if (popupWindow != null) {
                     popupWindow.dismiss();
@@ -158,89 +166,101 @@ public class HotGoodActivity extends BaseActivity<IHotGood.Presenter> implements
             case R.id.txt_sort:
                 resetPriceState();
                 txtSort.setTextColor(Color.parseColor(HotGoodActivity.this.getString(R.color.red)));
-                sort = CATEGORY;
-                categoryId=1005000;
-                presenter.getHotGood(getParam());
+
                 initPop();
                 break;
         }
     }
 
+    @SuppressLint("ResourceType")
     private void initPop() {
-        View inflate = LayoutInflater.from(this).inflate(R.layout.pop_item, null);
-
-        popupWindow = new PopupWindow(inflate, ViewGroup.LayoutParams.MATCH_PARENT, 200);
-        popupWindow.setAttachedInDecor(true);
-
         popupWindow.showAsDropDown(txtSort);
-        mName1Tv = (TextView) inflate.findViewById(R.id.tv_name1);
-        mName2Tv = (TextView) inflate.findViewById(R.id.tv_name2);
-        mName3Tv = (TextView) inflate.findViewById(R.id.tv_name3);
-        mName4Tv = (TextView) inflate.findViewById(R.id.tv_name4);
-        mName5Tv = (TextView) inflate.findViewById(R.id.tv_name5);
-        mName6Tv = (TextView) inflate.findViewById(R.id.tv_name6);
 
-        mName2Tv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String name1 = mName2Tv.getText().toString();
-                for (int i = 0; i < filterCategory.size(); i++) {
-                    HotGoodListBean.DataBeanX.FilterCategoryBean name = filterCategory.get(i);
-                    if (name1.equals(name.getName())){
-                        int id = name.getId();
-                        categoryId=ID;
-                        sort = CATEGORY;
-                        presenter.getHotGood(getParam());
-                        break;
-                    }
-                }
 
-            }
-        });
-        mName1Tv.setOnClickListener(this::onClickItem);
-        mName3Tv.setOnClickListener(this::onClickItem);
-        mName4Tv.setOnClickListener(this::onClickItem);
-        mName5Tv.setOnClickListener(this::onClickItem);
-        mName6Tv.setOnClickListener(this::onClickItem);
+        mAll = (TextView)inflate.findViewById(R.id.all);
+        mHome = (TextView) inflate.findViewById(R.id.home);
+        mDinner = (TextView) inflate.findViewById(R.id.dinner);
+        mChider = (TextView) inflate.findViewById(R.id.chider);
+        mCargo = (TextView) inflate.findViewById(R.id.cargo);
+        mDiet = (TextView) inflate.findViewById(R.id.diet);
+
+
+
+        mAll.setOnClickListener(this::onClickItem);
+        mHome.setOnClickListener(this::onClickItem);
+        mDinner.setOnClickListener(this::onClickItem);
+        mChider.setOnClickListener(this::onClickItem);
+        mCargo.setOnClickListener(this::onClickItem);
+        mDiet.setOnClickListener(this::onClickItem);
     }
 
+    @SuppressLint("ResourceType")
     @OnClick
-    public void onClickItem(View view){
-        switch (view.getId()){
-            case R.id.tv_name1:
-                String name1 = mName1Tv.getText().toString();
-                initList(name1);
+    public void onClickItem(View view) {
+        switch (view.getId()) {
+            case R.id.all:
+//                initColor();
+                String name1 = mAll.getText().toString();
+                initList(name1,mAll);
+
                 break;
-//            case R.id.tv_name2:
-//                String name2 = mName2Tv.getText().toString();
-//                initList(name2);
-//                break;
-            case R.id.tv_name3:
-                String name3 = mName3Tv.getText().toString();
-                initList(name3);
+            case R.id.home:
+//                initColor();
+                String name2 = mHome.getText().toString();
+                initList(name2,mHome);
                 break;
-            case R.id.tv_name4:
-                String name4 = mName4Tv.getText().toString();
-                initList(name4);
+            case R.id.dinner:
+//                initColor();
+                String name3 = mDinner.getText().toString();
+                initList(name3,mDinner);
                 break;
-            case R.id.tv_name5:
-                String name5 = mName5Tv.getText().toString();
-                initList(name5);
+            case R.id.chider:
+//                initColor();
+                String name4 = mChider.getText().toString();
+                initList(name4,mChider);
                 break;
-            case R.id.tv_name6:
-                String name6 = mName6Tv.getText().toString();
-                initList(name6);
+            case R.id.cargo:
+//                initColor();
+                String name5 = mCargo.getText().toString();
+                initList(name5,mCargo);
+                break;
+            case R.id.diet:
+                String name6 = mDiet.getText().toString();
+                initList(name6,mDiet);
                 break;
         }
     }
 
-    private void initList(String name1) {
+    @SuppressLint("ResourceType")
+    private void initColor() {
+        mAll.setTextColor(Color.parseColor(getString(R.color.black)));
+        mHome.setTextColor(Color.parseColor(getString(R.color.black)));
+        mDinner.setTextColor(Color.parseColor(getString(R.color.black)));
+        mChider.setTextColor(Color.parseColor(getString(R.color.black)));
+        mCargo.setTextColor(Color.parseColor(getString(R.color.black)));
+        mDiet.setTextColor(Color.parseColor(getString(R.color.black)));
+        mAll.setBackgroundResource(R.drawable.shap1);
+        mHome.setBackgroundResource(R.drawable.shap1);
+        mDinner.setBackgroundResource(R.drawable.shap1);
+        mChider.setBackgroundResource(R.drawable.shap1);
+        mCargo.setBackgroundResource(R.drawable.shap1);
+        mDiet.setBackgroundResource(R.drawable.shap1);
+
+    }
+
+    @SuppressLint("ResourceType")
+    private void initList(String name1, TextView txt) {
+        initColor();
         for (int i = 0; i < filterCategory.size(); i++) {
             HotGoodListBean.DataBeanX.FilterCategoryBean name = filterCategory.get(i);
-            if (name1.equals(name.getName())){
-                Toast.makeText(this, name.getId()+"", Toast.LENGTH_SHORT).show();
-                int id = name.getId();
-                ID=id;
+            if (name1.equals(name.getName())) {
+                Toast.makeText(this, name.getId() + "", Toast.LENGTH_SHORT).show();
+                sort = CATEGORY;
+                categoryId = name.getId();
+                presenter.getHotGood(getParam());
+                popupWindow.dismiss();
+                txt.setTextColor(Color.parseColor(this.getString(R.color.red)));
+                txt.setBackgroundResource(R.drawable.shap);
                 break;
             }
         }
@@ -258,7 +278,7 @@ public class HotGoodActivity extends BaseActivity<IHotGood.Presenter> implements
         map.put("size", String.valueOf(size));
         map.put("order", order);
         map.put("sort", sort);
-        map.put("category", String.valueOf(categoryId));
+        map.put("categoryId", String.valueOf(categoryId));
         return map;
     }
 
@@ -308,7 +328,7 @@ public class HotGoodActivity extends BaseActivity<IHotGood.Presenter> implements
 
     @Override
     public void getHot(HotBase hotBase) {
-        if (hotBase!=null){
+        if (hotBase != null) {
             HotBase.DataBean.BannerInfoBean bannerInfo = hotBase.getData().getBannerInfo();
             Glide.with(this).load(bannerInfo.getImg_url()).into(imgHotGood);
             txtInfo.setText(bannerInfo.getName());

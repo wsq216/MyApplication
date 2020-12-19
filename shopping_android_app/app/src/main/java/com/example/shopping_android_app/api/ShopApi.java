@@ -59,7 +59,7 @@ public interface ShopApi {
 
     //新品页面商品列表数据
     //https://cdplay.cn/api/goods/list?isNew=1&page=1&size =1000&order=asc&sort=default&categoryId=0
-    @GET("api/goods/list")
+    @GET("api/goods/list?")
     Flowable<HotGoodListBean> getHotGoodList(@QueryMap HashMap<String, String> map);
 
 

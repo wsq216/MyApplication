@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:background="#fff"
+    android:layout_margin="@dimen/dp_10"
+    android:layout_height="@dimen/dp_100">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:text="全部"
+            android:id="@+id/all"
+            android:textColor="@color/red"
+            android:layout_margin="@dimen/dp_10"
+            android:background="@drawable/shap"
+            android:layout_width="@dimen/dp_40"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:layout_height="@dimen/dp_30"/>
+        <TextView
+            android:text="居家"
+            android:id="@+id/home"
+            android:layout_margin="@dimen/dp_10"
+            android:textColor="@color/color"
+            android:background="@drawable/shap1"
+            android:layout_width="@dimen/dp_40"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:layout_height="@dimen/dp_30"/>
+        <TextView
+            android:text="餐厨"
+            android:id="@+id/dinner"
+            android:layout_margin="@dimen/dp_10"
+            android:textColor="@color/color"
+            android:background="@drawable/shap1"
+            android:layout_width="@dimen/dp_40"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:layout_height="@dimen/dp_30"/>
+        <TextView
+            android:text="婴童"
+            android:layout_margin="@dimen/dp_10"
+            android:id="@+id/chider"
+            android:textColor="@color/color"
+            android:background="@drawable/shap1"
+            android:layout_width="@dimen/dp_40"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:layout_height="@dimen/dp_30"/>
+        <TextView
+            android:text="杂货"
+            android:id="@+id/cargo"
+            android:layout_margin="@dimen/dp_10"
+            android:textColor="@color/color"
+            android:background="@drawable/shap1"
+            android:layout_width="@dimen/dp_40"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:layout_height="@dimen/dp_30"/>
+    </LinearLayout>
+
+    <TextView
+        android:text="饮食"
+        android:id="@+id/diet"
+        android:layout_margin="@dimen/dp_10"
+        android:textColor="@color/color"
+        android:background="@drawable/shap1"
+        android:layout_width="@dimen/dp_40"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:layout_height="@dimen/dp_30"/>
+
+
+</LinearLayout>
