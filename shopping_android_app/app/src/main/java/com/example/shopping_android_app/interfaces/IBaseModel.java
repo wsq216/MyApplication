@@ -2,8 +2,10 @@ package com.example.shopping_android_app.interfaces;
 
 import io.reactivex.disposables.Disposable;
 
-public interface IModel {
-    void addDisposable(Disposable disposable);
+public interface IBaseModel {
 
-    void close();
+    void addDisposible(Disposable disposable);
+
+    void clear();
+
 }

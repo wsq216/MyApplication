@@ -1,24 +1,11 @@
 package com.example.shopping_android_app.ui.dashboard;
 
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-
 import com.example.shopping_android_app.R;
 import com.example.shopping_android_app.base.BaseFragment;
 import com.example.shopping_android_app.base.BasePresenter;
+import com.example.shopping_android_app.interfaces.IBasePresenter;
 
 public class DashboardFragment extends BaseFragment {
-
-
     @Override
     protected BasePresenter createPersenter() {
         return null;
@@ -36,11 +23,37 @@ public class DashboardFragment extends BaseFragment {
 
     @Override
     protected int getLayout() {
-        return 0;
+        return R.layout.fragment_dashboard;
     }
 
     @Override
-    public void fila(String error) {
+    public void showLoading(int visible) {
 
     }
+
+    @Override
+    public void showToast(String tips) {
+
+    }
+
+
+//    @Override
+//    protected int getLayout() {
+//        return R.layout.fragment_dashboard;
+//    }
+//
+//    @Override
+//    protected IBasePresenter createPrenter() {
+//        return null;
+//    }
+//
+//    @Override
+//    protected void initView() {
+//
+//    }
+//
+//    @Override
+//    protected void initData() {
+//
+//    }
 }

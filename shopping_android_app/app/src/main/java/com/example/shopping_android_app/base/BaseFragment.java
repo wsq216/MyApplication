@@ -10,12 +10,12 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 
-import com.example.shopping_android_app.interfaces.BeanView;
+import com.example.shopping_android_app.interfaces.IBaseView;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public abstract class BaseFragment<P extends BasePresenter> extends Fragment implements BeanView {
+public abstract class BaseFragment<P extends BasePresenter> extends Fragment implements IBaseView {
 
     protected P presenter;
     Unbinder unbinder;

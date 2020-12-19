@@ -2,22 +2,22 @@ package com.example.shopping_android_app.base;
 
 
 
-
-import com.example.shopping_android_app.interfaces.IModel;
+import com.example.shopping_android_app.interfaces.IBaseModel;
 
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
-public abstract class BaseModel implements IModel {
-    CompositeDisposable compositeDisposable=new CompositeDisposable();
+public abstract class BaseModel implements IBaseModel {
+
+    CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     @Override
-    public void addDisposable(Disposable disposable) {
+    public void addDisposible(Disposable disposable) {
         compositeDisposable.add(disposable);
     }
 
     @Override
-    public void close() {
+    public void clear() {
         compositeDisposable.clear();
     }
 }

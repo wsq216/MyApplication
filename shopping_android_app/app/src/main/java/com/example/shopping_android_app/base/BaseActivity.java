@@ -1,17 +1,22 @@
 package com.example.shopping_android_app.base;
 
 import android.os.Bundle;
+import android.os.Looper;
+import android.view.LayoutInflater;
+import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 
-import com.example.shopping_android_app.interfaces.BeanView;
+import com.example.shopping_android_app.interfaces.IBasePresenter;
+import com.example.shopping_android_app.interfaces.IBaseView;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public abstract class BaseActivity<P extends BasePresenter> extends AppCompatActivity implements BeanView {
+public abstract class BaseActivity<P extends IBasePresenter> extends AppCompatActivity implements IBaseView {
+
 
     protected P presenter;
     Unbinder unbinder;
@@ -19,38 +24,45 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(getLayout());
+        int layout = getLayout();
+        if(layout <= 0){
+            throw new RuntimeException("layout id not allow 0 or <0");
+        }else{
+            setContentView(getLayout());
+        }
+//        View root = LayoutInflater.from(this).inflate(getLayout(),null);
         unbinder = ButterKnife.bind(this);
-        initView();
-        presenter = createPersenter();
-        if (presenter!=null){
+        presenter = createPrenter();
+        if(presenter != null){
             presenter.attachView(this);
         }
-
+        initView();
         initData();
+    }
+
+    protected abstract int getLayout();
+    protected abstract P createPrenter();
+    protected abstract void initView();
+    protected abstract  void initData();
+
+    @Override
+    public void showLoading(int visible) {
 
     }
 
-    protected abstract P createPersenter();
+    @Override
+    public void showToast(String tips) {
 
-    protected abstract void initData();
+    }
 
-    protected abstract void initView();
-
-    protected abstract int getLayout();
-
-    /**
-     * 界面销毁
-     */
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(unbinder != null){
-            unbinder.unbind();
-        }
-        //释放p关联的v的引用
         if(presenter != null){
             presenter.unAttachView();
+        }
+        if(unbinder != null){
+            unbinder.unbind();
         }
     }
 }

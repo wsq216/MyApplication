@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
+    app:labelVisibilityMode="labeled"
     app:startDestination="@+id/navigation_home">
 
     <fragment
@@ -22,4 +23,14 @@
         android:name="com.example.shopping_android_app.ui.notifications.NotificationsFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_notifications" />
+    <fragment
+        android:id="@+id/navigation_shop"
+        android:name="com.example.shopping_android_app.ui.shop.ShopFragment"
+        android:label="@string/title_shopping_cat"
+        tools:layout="@layout/fragment_shop" />
+    <fragment
+        android:id="@+id/navigation_my"
+        android:name="com.example.shopping_android_app.ui.my.MyFragment"
+        android:label="@string/title_my"
+        tools:layout="@layout/fragment_my" />
 </navigation>

@@ -13,48 +13,69 @@ import java.util.List;
 
 public abstract class BaseAdapter<D> extends RecyclerView.Adapter {
 
-    List<D> list;
-    Context context;
+    List<D> mData; //adapter的数据
+    protected Context context;
+    protected IListClick click;
 
+    protected IItemViewClick iItemViewClick;
 
-    public BaseAdapter(List<D> list, Context context) {
-        this.list = list;
+    public void addItemViewClick(IItemViewClick click){
+        this.iItemViewClick = click;
+    }
+
+    public BaseAdapter(Context context, List<D> data){
         this.context = context;
+        mData = data;
     }
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view= LayoutInflater.from(context).inflate(getLagout(),parent,false);
+        int layout = getLayout(viewType);
+        if(layout <= 0 ){
+            new RuntimeException("布局非法");
+        }
+        View view = LayoutInflater.from(context).inflate(layout,parent,false);
         VH vh = new VH(view);
-        vh.itemView.setOnClickListener(new View.OnClickListener() {
+        vh.itemView.setOnClickListener(new View.OnClickListener(){
+
             @Override
-            public void onClick(View view) {
-                if (iListClick!=null){
-                    iListClick.itemClick(vh.getLayoutPosition());
+            public void onClick(View v) {
+                //接口回调的调用
+                if(click != null){
+                    click.itemClick(vh.getLayoutPosition());
                 }
             }
         });
-
         return vh;
     }
 
-    protected abstract int getLagout();
-
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        bindData(list.get(position),(VH)holder,position);
+        bindData(mData.get(position), (VH) holder);
     }
-
-    protected abstract void bindData(D d, VH holder,int position);
 
     @Override
     public int getItemCount() {
-        return list.size();
+        return mData.size();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return super.getItemViewType(position);
     }
 
     protected  List<D> getData(){
-        return list;
+        return mData;
+    }
+
+
+    protected abstract int getLayout(int type);
+
+    protected abstract void bindData(D data,VH vh);
+
+    public void addListClick(IListClick click){
+        this.click = click;
     }
 
     //定义回调接口
@@ -62,33 +83,20 @@ public abstract class BaseAdapter<D> extends RecyclerView.Adapter {
         void itemClick(int pos);
     }
 
-    public IListClick iListClick;
-
-    public void setiListClick(IListClick iListClick) {
-        this.iListClick = iListClick;
-    }
-
-    protected IItemViewClick iItemViewClick;
-
-    public interface IItemViewClick<T>{
+    public interface IItemViewClick<D>{
         //条目中的元素点击
-        void itemViewClick(int viewid, T data);
-    }
-
-    public void addItemViewClick(IItemViewClick click){
-        this.iItemViewClick = click;
+        void itemViewClick(int viewid, D data);
     }
 
 
     public class VH extends RecyclerView.ViewHolder{
 
-        SparseArray views=new SparseArray();
+        SparseArray views = new SparseArray();
 
-
-        public VH(View view) {
-            super(view);
-
+        public VH(@NonNull View itemView) {
+            super(itemView);
         }
+
         //查找item的view
         public View getViewById(int id){
             View view = (View) views.get(id);
@@ -100,4 +108,6 @@ public abstract class BaseAdapter<D> extends RecyclerView.Adapter {
         }
 
     }
+
+
 }

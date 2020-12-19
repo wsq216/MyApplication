@@ -2,8 +2,8 @@ package com.example.shopping_android_app.interfaces;
 
 public interface Callback<T> {
 
-    void fail(String msg);
+    void success(T data);
 
-    void success(T t);
+    void fail(String err);
 
 }
