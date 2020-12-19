@@ -199,28 +199,23 @@ public class HotGoodActivity extends BaseActivity<IHotGood.Presenter> implements
     public void onClickItem(View view) {
         switch (view.getId()) {
             case R.id.all:
-//                initColor();
                 String name1 = mAll.getText().toString();
                 initList(name1,mAll);
 
                 break;
             case R.id.home:
-//                initColor();
                 String name2 = mHome.getText().toString();
                 initList(name2,mHome);
                 break;
             case R.id.dinner:
-//                initColor();
                 String name3 = mDinner.getText().toString();
                 initList(name3,mDinner);
                 break;
             case R.id.chider:
-//                initColor();
                 String name4 = mChider.getText().toString();
                 initList(name4,mChider);
                 break;
             case R.id.cargo:
-//                initColor();
                 String name5 = mCargo.getText().toString();
                 initList(name5,mCargo);
                 break;
@@ -253,7 +248,6 @@ public class HotGoodActivity extends BaseActivity<IHotGood.Presenter> implements
         for (int i = 0; i < filterCategory.size(); i++) {
             HotGoodListBean.DataBeanX.FilterCategoryBean name = filterCategory.get(i);
             if (name1.equals(name.getName())) {
-                Toast.makeText(this, name.getId() + "", Toast.LENGTH_SHORT).show();
                 sort = CATEGORY;
                 categoryId = name.getId();
                 presenter.getHotGood(getParam());
