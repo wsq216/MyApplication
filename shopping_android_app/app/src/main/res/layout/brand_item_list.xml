@@ -14,7 +14,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:text="aaaaaaaaaaaaaaa"
+        android:text="aaaaaaaaaa"
         android:textColor="@color/gray_word"
         android:textSize="@dimen/sp_16"
         android:layout_width="wrap_content"

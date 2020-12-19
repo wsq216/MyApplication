@@ -245,7 +245,6 @@ public class HotGoodActivity extends BaseActivity<IHotGood.Presenter> implements
         mChider.setBackgroundResource(R.drawable.shap1);
         mCargo.setBackgroundResource(R.drawable.shap1);
         mDiet.setBackgroundResource(R.drawable.shap1);
-
     }
 
     @SuppressLint("ResourceType")
