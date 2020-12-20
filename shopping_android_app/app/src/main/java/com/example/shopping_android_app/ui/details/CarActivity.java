@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -70,6 +71,20 @@ public class CarActivity extends BaseActivity<IDetail.Presenter> implements IDet
     LinearLayout linearCommonProblem;
     @BindView(R.id.layout_shop)
     ConstraintLayout layoutShop;
+    @BindView(R.id.linear_attribute)
+    LinearLayout linearAttribute;
+    @BindView(R.id.details_num)
+    ConstraintLayout detailsNum;
+    @BindView(R.id.img_comment_hot)
+    ImageView imgCommentHot;
+    @BindView(R.id.txt_comment_name)
+    TextView txtCommentName;
+    @BindView(R.id.txt_comment_time)
+    TextView txtCommentTime;
+    @BindView(R.id.txt_comment_text)
+    TextView txtCommentText;
+    @BindView(R.id.linear_comment_img)
+    LinearLayout linearCommentImg;
 
 
     private String h5 = "<html>\n" +
@@ -133,19 +148,99 @@ public class CarActivity extends BaseActivity<IDetail.Presenter> implements IDet
         webView.loadDataWithBaseURL("about:blank", content, "text/html", "utf-8", null);
     }
 
+    private static final String TAG = "CarActivity";
     @Override
     public void getDetails(DetailsBase detailsBase) {
-        initBanner(detailsBase.getData().getGallery());
-        initText(detailsBase.getData().getInfo());
-        //h5 商品详情
-        initGoodDetail(detailsBase.getData().getInfo().getGoods_desc());
-        initCommonProblem(detailsBase.getData().getIssue());
+        if (detailsBase!=null) {
+            //详情图【片
+            List<DetailsBase.DataBeanX.GalleryBean> gallery = detailsBase.getData().getGallery();
+            if (gallery != null) {
+                initBanner(gallery);
+            } else {
+                Log.d(TAG, "gallery: null");
+            }
+            //商品  大家都再看
+            DetailsBase.DataBeanX.InfoBean info = detailsBase.getData().getInfo();
+            if (info != null) {
+                initText(info);
+            }else {
+                Log.d(TAG, "info: null");
+            }
 
+            //h5 商品详情
+            String goods_desc = detailsBase.getData().getInfo().getGoods_desc();
+            if (goods_desc != null) {
+                initGoodDetail(goods_desc);
+            }else {
+                Log.d(TAG, "goods_desc: null");
+            }
+            //常见问题
+            List<DetailsBase.DataBeanX.IssueBean> issue = detailsBase.getData().getIssue();
+            if (issue != null) {
+                initCommonProblem(issue);
+            }else {
+                Log.d(TAG, "issue: null");
+            }
+            //商品规格
+            List<DetailsBase.DataBeanX.AttributeBean> attribute = detailsBase.getData().getAttribute();
+            if (attribute != null) {
+                initAttribute(attribute);
+            }else {
+                Log.d(TAG, "attribute: null");
+            }
+
+            //选择商品数量
+            String galleryBean = gallery.get(0).getImg_url();
+            int retail_price = info.getRetail_price();
+            initDetail(galleryBean,retail_price);
+
+            //评论
+            DetailsBase.DataBeanX.CommentBean comment = detailsBase.getData().getComment();
+            if (comment != null) {
+                initComment(comment);
+            }else {
+                Log.d(TAG, "comment: null");
+            }
+        }else{
+            Log.e(TAG, "getDetails: null" );
+        }
+
+    }
+
+    private void initComment(DetailsBase.DataBeanX.CommentBean comment) {
+        txtAssess.setText("评价("+comment.getCount()+")");
+        txtCommentName.setText(comment.getData().getNickname()+"");
+        txtCommentTime.setText(comment.getData().getAdd_time());
+        txtCommentText.setText(comment.getData().getContent());
+        List<DetailsBase.DataBeanX.CommentBean.DataBean.PicListBean> pic_list = comment.getData().getPic_list();
+        for (int i = 0; i < pic_list.size(); i++) {
+            View inflate = LayoutInflater.from(this).inflate(R.layout.details_item_comment_img, null);
+            ImageView img = inflate.findViewById(R.id.img_comment);
+            Glide.with(this).load(pic_list.get(i).getPic_url()).into(img);
+            inflate.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f));
+            linearCommentImg.addView(inflate);
+        }
+    }
+
+    private void initDetail(String galleryBean, int retail_price) {
+        View inflate = LayoutInflater.from(this).inflate(R.layout.details_pop_home, null);
+    }
+
+    private void initAttribute(List<DetailsBase.DataBeanX.AttributeBean> attribute) {
+        for (int i = 0; i < attribute.size(); i++) {
+            View inflate = LayoutInflater.from(this).inflate(R.layout.details_item_attribute, null);
+            TextView value = inflate.findViewById(R.id.value);
+            TextView name = inflate.findViewById(R.id.name);
+            DetailsBase.DataBeanX.AttributeBean attributeBean = attribute.get(i);
+            name.setText(attributeBean.getName());
+            value.setText(attributeBean.getValue());
+            linearAttribute.addView(inflate);
+        }
     }
 
     private void initCommonProblem(List<DetailsBase.DataBeanX.IssueBean> productList) {
         for (int i = 0; i < productList.size(); i++) {
-            View inflate = LayoutInflater.from(this).inflate(R.layout.details_item_problem,null);
+            View inflate = LayoutInflater.from(this).inflate(R.layout.details_item_problem, null);
             TextView answer = inflate.findViewById(R.id.answer);
             TextView question = inflate.findViewById(R.id.question);
             DetailsBase.DataBeanX.IssueBean productListBean = productList.get(i);
@@ -182,7 +277,6 @@ public class CarActivity extends BaseActivity<IDetail.Presenter> implements IDet
 
         rvList.setAdapter(detailsAdapter);
     }
-
 
 
 }
