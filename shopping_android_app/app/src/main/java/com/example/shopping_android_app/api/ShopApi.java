@@ -9,6 +9,8 @@ import com.example.shopping_android_app.model.home.CategoryListBean;
 import com.example.shopping_android_app.model.home.HomeBean;
 import com.example.shopping_android_app.model.home.HotBase;
 import com.example.shopping_android_app.model.home.HotGoodListBean;
+import com.example.shopping_android_app.model.home.catalog.CatalogBase;
+import com.example.shopping_android_app.model.home.catalog.CatalogListBase;
 import com.example.shopping_android_app.model.home.details.DetailsBase;
 import com.example.shopping_android_app.model.home.details.RelatedBase;
 
@@ -31,6 +33,7 @@ public interface ShopApi {
     Flowable<HomeBean> getHome();
 
     //分页导航
+    //http://cdplay.cn/goods/category?id=1005007
     @GET("goods/category?")
     Flowable<CategoryBean> getCategory(@Query("id") String url);
 
@@ -76,6 +79,12 @@ public interface ShopApi {
     Flowable<RelatedBase> getRelated(@Query("id") int id);
 
 
+    //https://cdplay.cn/api/catalog/index
+    //竖导航数据
+    @GET("api/catalog/index")
+    Flowable<CatalogBase> getCatalog();
 
-
+    //https://cdplay.cn/api/catalog/current?id=1005001
+    @GET("api/catalog/current?")
+    Flowable<CatalogListBase> getCatalogList(@Query("id") int id);
 }

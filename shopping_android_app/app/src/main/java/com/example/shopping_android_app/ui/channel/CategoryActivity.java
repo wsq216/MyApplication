@@ -73,6 +73,10 @@ public class CategoryActivity extends BaseActivity<HomePresenter> implements IHo
         if (url != null) {
             presenter.getCategory(url);
         }
+        String id = getIntent().getStringExtra("id");
+        if (id != null) {
+            presenter.getCategory(id);
+        }
     }
 
     @Override
@@ -113,6 +117,8 @@ public class CategoryActivity extends BaseActivity<HomePresenter> implements IHo
                 return list.size();
             }
 
+
+
         });
 
         String name1 = getIntent().getStringExtra("name");
@@ -136,10 +142,4 @@ public class CategoryActivity extends BaseActivity<HomePresenter> implements IHo
 
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
 }

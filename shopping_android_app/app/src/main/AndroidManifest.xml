@@ -13,11 +13,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.dashboard.BreadItemActivity"></activity>
+        <activity android:name=".ui.details.BigImageActivity"></activity>
+        <activity android:name=".ui.dashboard.BreadItemActivity" />
         <activity android:name=".ui.dashboard.BrandActivity" />
         <activity android:name=".ui.channel.CategoryActivity" />
-        <activity android:name=".ui.home.HotGoodActivity"/>
-        <activity android:name=".ui.details.CarActivity"/>
+        <activity android:name=".ui.home.HotGoodActivity" />
+        <activity android:name=".ui.details.CarActivity" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name">
