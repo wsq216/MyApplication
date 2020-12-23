@@ -45,6 +45,7 @@ public class CarListAdapter extends BaseAdapter<CarBean.DataBean.CartListBean> {
         NumberSelect numberSelect = (NumberSelect) vh.getViewById(R.id.layout_change);
 
         txtName.setVisibility(isEdit?View.GONE:View.VISIBLE);
+        
         txtNumber.setVisibility(isEdit?View.GONE:View.VISIBLE);
         txtEditTitle.setVisibility(isEdit?View.VISIBLE:View.GONE);
         numberSelect.setVisibility(isEdit?View.VISIBLE:View.GONE);
