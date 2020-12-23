@@ -48,6 +48,7 @@ public class CarListAdapter extends BaseAdapter<CarBean.DataBean.CartListBean> {
         txtNumber.setVisibility(isEdit?View.GONE:View.VISIBLE);
         txtEditTitle.setVisibility(isEdit?View.VISIBLE:View.GONE);
         numberSelect.setVisibility(isEdit?View.VISIBLE:View.GONE);
+        
 
         // 设置选中状态
         checkBox.setChecked(isEdit?data.selectEdit:data.selectOrder);
