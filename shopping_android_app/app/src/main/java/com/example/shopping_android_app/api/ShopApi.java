@@ -13,16 +13,20 @@ import com.example.shopping_android_app.model.home.catalog.CatalogBase;
 import com.example.shopping_android_app.model.home.catalog.CatalogListBase;
 import com.example.shopping_android_app.model.home.details.DetailsBase;
 import com.example.shopping_android_app.model.home.details.RelatedBase;
+import com.example.shopping_android_app.model.home.login.LoginBean;
+import com.example.shopping_android_app.model.home.login.RegisterBean;
+import com.example.shopping_android_app.model.home.shop.CarBean;
 
 import java.util.HashMap;
 
 import io.reactivex.Flowable;
+import retrofit2.http.Field;
+import retrofit2.http.FieldMap;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
-import retrofit2.http.Part;
-import retrofit2.http.Path;
+import retrofit2.http.POST;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
-import retrofit2.http.Url;
 
 public interface ShopApi {
 
@@ -87,4 +91,27 @@ public interface ShopApi {
     //https://cdplay.cn/api/catalog/current?id=1005001
     @GET("api/catalog/current?")
     Flowable<CatalogListBase> getCatalogList(@Query("id") int id);
+
+    //登录
+    @POST("api/auth/login")
+    @FormUrlEncoded
+    Flowable<LoginBean> login(@Field("username") String username, @Field("password") String pw);
+
+    //注册
+    //https://cdplay.cn/api/auth/register
+    @POST("api/auth/register")
+    @FormUrlEncoded
+    Flowable<RegisterBean> getreister(@Field("username") String username, @Field("password") String pw);
+
+
+    //添加到购物车
+    @POST("api/cart/add")
+    @FormUrlEncoded
+    Flowable<LoginBean> addCar(@FieldMap HashMap<String,String> map);
+
+    //购物车列表
+    @GET("api/cart/index")
+    Flowable<CarBean> getCarList();
+
+
 }

@@ -3,6 +3,7 @@ package com.example.shopping_android_app.ui.details;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -33,6 +34,8 @@ import com.example.shopping_android_app.interfaces.home.IDetail;
 import com.example.shopping_android_app.model.home.details.DetailsBase;
 import com.example.shopping_android_app.model.home.details.RelatedBase;
 import com.example.shopping_android_app.presenter.home.DetailsPresenter;
+import com.example.shopping_android_app.ui.login.LoginActivity;
+import com.example.shopping_android_app.utils.SpUtils;
 import com.youth.banner.Banner;
 import com.youth.banner.loader.ImageLoader;
 
@@ -45,6 +48,8 @@ import java.util.regex.Pattern;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
 
 public class CarActivity extends BaseActivity<IDetail.Presenter> implements IDetail.View {
 
@@ -133,6 +138,21 @@ public class CarActivity extends BaseActivity<IDetail.Presenter> implements IDet
 
     @Override
     protected void initView() {
+//        RealmConfiguration config = new RealmConfiguration.Builder()
+//                .name("myrealm.realm") //文件名
+//                .schemaVersion(0) //版本号
+//                .build();
+//        Realm realm = Realm.getInstance(config);
+        Realm.init(this);
+        RealmConfiguration configuration = new RealmConfiguration.Builder()
+                .name("test.realm")
+                .schemaVersion(0)
+                //.deleteRealmIfMigrationNeeded()
+                .build();
+
+        Realm realm = Realm.getInstance(configuration);
+        String str = realm.getPath();
+        Log.i(TAG, str);
 
     }
 
@@ -223,17 +243,6 @@ public class CarActivity extends BaseActivity<IDetail.Presenter> implements IDet
             }
         });
 
-//        LinearLayout id = findViewById(R.id.home__detail_info_30_ll);
-//        id.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Bundle bundle = new Bundle();
-//                bundle.putStringArrayList("image",listUrl);
-//                Intent intent = new Intent(CategoryActivity.this, BigImageActivity.class);
-//                intent.putExtra("bundle", bundle);
-//                startActivity(intent);
-//            }
-//        });
 
     }
 
@@ -322,18 +331,20 @@ public class CarActivity extends BaseActivity<IDetail.Presenter> implements IDet
         TextView no = inflate.findViewById(R.id.txt_no);
         TextView price = inflate.findViewById(R.id.txt_price);
         TextView brief = inflate.findViewById(R.id.txt_brief);
+        popupWindow = new PopupWindow(inflate, ViewGroup.LayoutParams.MATCH_PARENT, 500);
+        popupWindow.setAttachedInDecor(true);
+
         detailsNum.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                popupWindow = new PopupWindow(inflate, ViewGroup.LayoutParams.MATCH_PARENT, 500);
-                popupWindow.setAttachedInDecor(true);
+                txtAddCar.setTag(1);
                 popupWindow.showAtLocation(linearAttribute, Gravity.BOTTOM, 0, 100);
             }
         });
         Glide.with(this).load(galleryBean).into(img);
         price.setText("价格：" + "\t￥" + retail_price);
         brief.setText("已选择：请选择规格数量");
-
+        txtAddCar.setTag(0);
         no.setOnClickListener(this::onClick);
         jian.setOnClickListener(this::onClick);
         jia.setOnClickListener(this::onClick);
@@ -342,29 +353,42 @@ public class CarActivity extends BaseActivity<IDetail.Presenter> implements IDet
 
     @OnClick
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.jian:
-                i--;
-                if (i > 0) {
-                    num.setText(i + "");
-                }
-                break;
-            case R.id.jia:
-                i++;
-                if (i > 0) {
-                    num.setText(i + "");
-                }
+        if (!TextUtils.isEmpty(SpUtils.getInstance().getString("token"))) {
+            switch (view.getId()) {
+                case R.id.jian:
+                    i--;
+                    i = i <= 0 ? 1 : i;
+                    if (i > 0) {
+                        num.setText(i + "");
+                    }
+                    break;
+                case R.id.jia:
+                    i++;
+                    if (i > 0) {
+                        num.setText(i + "");
+                    }
 
-                break;
-            case R.id.txt_no:
-                popupWindow.dismiss();
-                break;
-            case R.id.txt_addCar:
-                int s = Integer.parseInt(txtNumber.getText().toString());
-                int s1 = Integer.parseInt(num.getText().toString());
-                txtNumber.setText(s + s1 + "");
-                popupWindow.dismiss();
-                break;
+                    break;
+                case R.id.txt_no:
+                    txtAddCar.setTag(0);
+                    popupWindow.dismiss();
+                    break;
+                case R.id.txt_addCar:
+                    int tag = (int) txtAddCar.getTag();
+                    int s = Integer.parseInt(txtNumber.getText().toString());
+                    int s1 = Integer.parseInt(num.getText().toString());
+                    if (tag == 0) {
+                        popupWindow.showAtLocation(linearAttribute, Gravity.BOTTOM, 0, 100);
+                        txtAddCar.setTag(1);
+                    } else {
+                        txtNumber.setText(s + s1 + "");
+                        popupWindow.dismiss();
+                        txtAddCar.setTag(0);
+                    }
+                    break;
+            }
+        }else {
+            startActivity(new Intent(CarActivity.this, LoginActivity.class));
         }
     }
 
@@ -421,11 +445,4 @@ public class CarActivity extends BaseActivity<IDetail.Presenter> implements IDet
         rvList.setAdapter(detailsAdapter);
     }
 
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
 }

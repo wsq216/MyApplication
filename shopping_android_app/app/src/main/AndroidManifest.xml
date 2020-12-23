@@ -13,7 +13,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.details.BigImageActivity"></activity>
+        <activity android:name=".ui.register.RegisterActivity"></activity>
+        <activity android:name=".ui.login.LoginActivity" />
+        <activity android:name=".ui.details.BigImageActivity" />
         <activity android:name=".ui.dashboard.BreadItemActivity" />
         <activity android:name=".ui.dashboard.BrandActivity" />
         <activity android:name=".ui.channel.CategoryActivity" />
