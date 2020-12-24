@@ -4,9 +4,12 @@ import com.example.shopping_android_app.base.BaseModel;
 import com.example.shopping_android_app.interfaces.Callback;
 import com.example.shopping_android_app.interfaces.home.IDetail;
 import com.example.shopping_android_app.model.home.HomeBean;
+import com.example.shopping_android_app.model.home.shop.AddCarBean;
 import com.example.shopping_android_app.net.CommonSubscriber;
 import com.example.shopping_android_app.net.HttpmManager;
 import com.example.shopping_android_app.utils.RxUtils;
+
+import java.util.Map;
 
 import io.reactivex.disposables.Disposable;
 
@@ -37,5 +40,20 @@ public class DetailsModel extends BaseModel implements IDetail.Model {
                     }
                 });
         addDisposible(disposable);
+    }
+
+    @Override
+    public void addGoodCar(Map<String, String> map, Callback callback) {
+        Disposable disposable=HttpmManager.getHttpmManager().getShopApi()
+                .addCar(map)
+                .compose(RxUtils.rxScheduler())
+                .subscribeWith(new CommonSubscriber<AddCarBean>(callback) {
+                    @Override
+                    public void onNext(AddCarBean homeBean) {
+                        callback.success(homeBean);
+                    }
+                });
+        addDisposible(disposable);
+
     }
 }

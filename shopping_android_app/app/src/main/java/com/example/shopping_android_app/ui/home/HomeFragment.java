@@ -10,12 +10,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.bumptech.glide.Glide;
+import com.example.shopping_android_app.MainActivity;
 import com.example.shopping_android_app.R;
 import com.example.shopping_android_app.adapter.BrandListAdapter;
 import com.example.shopping_android_app.adapter.CategoryListAdapter;
@@ -31,6 +33,7 @@ import com.example.shopping_android_app.model.home.HomeBean;
 import com.example.shopping_android_app.presenter.home.HomePresenter;
 import com.example.shopping_android_app.ui.channel.CategoryActivity;
 import com.example.shopping_android_app.ui.dashboard.BrandActivity;
+import com.example.shopping_android_app.ui.dashboard.DashboardFragment;
 import com.example.shopping_android_app.ui.details.CarActivity;
 import com.youth.banner.Banner;
 import com.youth.banner.loader.ImageLoader;
@@ -62,6 +65,10 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements IHome.V
     TextView txtBrandTitle;
     @BindView(R.id.txt_newgood_title)
     TextView txtNewgoodTitle;
+    @BindView(R.id.txt_pop_title)
+    TextView txtPopTitle;
+    @BindView(R.id.txt_tit_title)
+    TextView txtTitTitle;
 
     @Override
     protected HomePresenter createPersenter() {
@@ -75,7 +82,14 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements IHome.V
 
     @Override
     protected void initView() {
-
+        txtTitTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), MainActivity.class);
+                intent.putExtra("id",1);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -159,10 +173,10 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements IHome.V
             categoryListAdapter.addListClick(new BaseAdapter.IListClick() {
                 @Override
                 public void itemClick(int pos) {
-                    List<HomeBean.DataBean.CategoryListBean.GoodsListBean> goodsListBeans= (List<HomeBean.DataBean.CategoryListBean.GoodsListBean>) view.getTag();
+                    List<HomeBean.DataBean.CategoryListBean.GoodsListBean> goodsListBeans = (List<HomeBean.DataBean.CategoryListBean.GoodsListBean>) view.getTag();
                     HomeBean.DataBean.CategoryListBean.GoodsListBean goodsListBean = goodsListBeans.get(pos);
                     Intent intent = new Intent(getActivity(), CarActivity.class);
-                    intent.putExtra("id",goodsListBean.getId());
+                    intent.putExtra("id", goodsListBean.getId());
                     startActivity(intent);
                 }
             });
@@ -225,7 +239,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements IHome.V
                 startActivity(new Intent(getActivity(), BrandActivity.class));
                 break;
             case R.id.txt_newgood_title:
-                startActivity(new Intent(getActivity(),HotGoodActivity.class));
+                startActivity(new Intent(getActivity(), HotGoodActivity.class));
                 break;
         }
     }

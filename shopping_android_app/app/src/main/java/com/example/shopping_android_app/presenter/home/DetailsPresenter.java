@@ -6,6 +6,9 @@ import com.example.shopping_android_app.interfaces.home.IDetail;
 import com.example.shopping_android_app.model.home.details.DetailsBase;
 import com.example.shopping_android_app.model.home.details.DetailsModel;
 import com.example.shopping_android_app.model.home.details.RelatedBase;
+import com.example.shopping_android_app.model.home.shop.AddCarBean;
+
+import java.util.Map;
 
 public class DetailsPresenter extends BasePresenter<IDetail.View> implements IDetail.Presenter {
 
@@ -47,5 +50,23 @@ public class DetailsPresenter extends BasePresenter<IDetail.View> implements IDe
 
             }
         },id);
+    }
+
+    @Override
+    public void addGoodCar(Map<String, String> map) {
+        detailsModel.addGoodCar(map, new Callback<AddCarBean>() {
+            @Override
+            public void success(AddCarBean data) {
+                if (mView!=null){
+                    mView.addGoodCarReturn(data);
+                }
+
+            }
+
+            @Override
+            public void fail(String err) {
+
+            }
+        });
     }
 }

@@ -1,6 +1,7 @@
 package com.example.shopping_android_app.ui.shop;
 
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -10,16 +11,21 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.shopping_android_app.R;
+import com.example.shopping_android_app.base.BaseAdapter;
 import com.example.shopping_android_app.base.BaseFragment;
 import com.example.shopping_android_app.interfaces.shop.ICar;
 import com.example.shopping_android_app.model.home.shop.CarBean;
+import com.example.shopping_android_app.model.home.shop.DeleteCarBean;
+import com.example.shopping_android_app.model.home.shop.UpdateCarBean;
 import com.example.shopping_android_app.presenter.home.shop.CarPresenter;
 import com.example.shopping_android_app.ui.login.LoginActivity;
 import com.example.shopping_android_app.utils.ActivityManager;
 import com.example.shopping_android_app.utils.SpUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 
@@ -56,16 +62,64 @@ public class ShopFragment extends BaseFragment<CarPresenter> implements ICar.Vie
 
     @Override
     protected void initData() {
+        //数据初始化
         listBeans = new ArrayList<>();
         recyGood.setLayoutManager(new LinearLayoutManager(getActivity()));
         carListAdapter = new CarListAdapter(getContext(),listBeans);
         recyGood.setAdapter(carListAdapter);
+        //判断是否登录账号
         String token = SpUtils.getInstance().getString("token");
         if (!TextUtils.isEmpty(token)) {
             presenter.getCarList();
         } else {
+            //登录跳转
             gotoLogin();
         }
+
+        //多布局的监听
+        carListAdapter.addItemViewClick(new BaseAdapter.IItemViewClick() {
+            @Override
+            public void itemViewClick(int id, Object data) {
+                for(CarBean.DataBean.CartListBean item:listBeans){
+                    if(item.getId() == id){
+                        if(!isEdit){//判断状态
+                            //下单状态
+                            item.selectOrder = (boolean) data;
+                        }else{
+                            //编辑状态
+                            item.selectEdit = (boolean) data;
+                        }
+                        break;
+                    }
+                }
+                boolean isSelectAll;
+                if(!isEdit){//判断状态
+                    //下单状态判断是否全选
+                    isSelectAll = totalSelectOrder();
+                }else{
+                    //编辑状态判断是否全选
+                    isSelectAll = totalSelectEdit();
+                }
+                //判断是否全选的状态
+                checkBoxAll.setChecked(isSelectAll);
+            }
+        });
+
+        // 监听编辑状态下item的数据变化
+        carListAdapter.setUpdateItem(new CarListAdapter.UpdateItem() {
+            @Override
+            public void updateItemDate(CarBean.DataBean.CartListBean data) {
+                Map<String,String> map = new HashMap<>();
+                map.put("goodsId",String.valueOf(data.getGoods_id()));
+                map.put("productId",String.valueOf(data.getProduct_id()));
+                map.put("id",String.valueOf(data.getId()));
+                map.put("number",String.valueOf(data.getNumber()));
+                //修改的网络请求
+                presenter.updateCar(map);
+
+                totalSelectEdit();
+            }
+        });
     }
 
     /**
@@ -78,19 +132,95 @@ public class ShopFragment extends BaseFragment<CarPresenter> implements ICar.Vie
 
     @Override
     protected void initView() {
-        checkBoxAll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        checkBoxAll.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isEdit) {
-                    updateGoodSelectStateEdit(isChecked);
-                } else {
-                    updateGoodSelectStateOrder(isChecked);
+            public void onClick(View v) {
+                Log.i("TAG","checkboxall:"+checkBoxAll.isChecked());
+                boolean bool = checkBoxAll.isChecked();
+                if(isEdit){
+                    updateGoodSelectStateEdit(bool);
+                }else{
+                    updateGoodSelectStateOrder(bool);
                 }
             }
         });
 
         txtEdit.setOnClickListener(this);
         txtSubmit.setOnClickListener(this);
+    }
+
+    /**
+     * 更新接口之后的返回
+     * @param result
+     */
+    @Override
+    public void updateCarReturn(UpdateCarBean result) {
+
+        Log.i("TAG",result.toString());
+
+        for(UpdateCarBean.DataBean.CartListBean item:result.getData().getCartList()){
+            updateCartListBeanNumberById(item.getId(),item.getNumber());
+        }
+        //更新商品的总数和总价
+        carBean.getData().getCartTotal().setGoodsCount(result.getData().getCartTotal().getGoodsCount());
+        carBean.getData().getCartTotal().setGoodsAmount(result.getData().getCartTotal().getGoodsAmount());
+        carListAdapter.notifyDataSetChanged();
+        totalSelectEdit();
+    }
+
+
+
+    /**
+     * 刷新购物车列表的数据
+     * @param carId
+     * @param number
+     */
+    private void updateCartListBeanNumberById(int carId,int number){
+        for(CarBean.DataBean.CartListBean item:listBeans){
+            if(item.getId() == carId){
+                item.setNumber(number);
+                break;
+            }
+        }
+    }
+
+    /**
+     * 删除购物车列表返回
+     * @param result
+     */
+    @Override
+    public void deleteCarReturn(DeleteCarBean result) {
+
+        Log.i("TAG","deleteCar:"+result.toString());
+        //通过购物车返回的最新数据，同步本地列表中的数据
+        int index,lg=listBeans.size();
+        for(index=0;index<lg; index++){
+            CarBean.DataBean.CartListBean item = listBeans.get(index);
+            boolean bool = deleteCarListById(result.getData().getCartList(),item.getId());
+            Log.i("TAG","delete bool:"+bool +" item:"+item.getId());
+            if(bool){
+                listBeans.remove(index);
+                index--;
+                lg--;
+            }
+        }
+        carListAdapter.notifyDataSetChanged();
+        totalSelectEdit();
+    }
+
+    /**
+     * 判断当前的本地列表的购物车列表数据是否在返回的最新列表中存在
+     * @param list
+     * @param carId
+     * @return
+     */
+    private boolean deleteCarListById(List<DeleteCarBean.DataBean.CartListBean> list ,int carId){
+        for(DeleteCarBean.DataBean.CartListBean item:list){
+            if(item.getId() == carId){
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -103,7 +233,10 @@ public class ShopFragment extends BaseFragment<CarPresenter> implements ICar.Vie
             item.selectOrder = bool;
         }
         totalSelectOrder();
+        carListAdapter.notifyDataSetChanged();
+
     }
+
 
     /**
      * 编辑状态下的数据刷新
@@ -115,20 +248,24 @@ public class ShopFragment extends BaseFragment<CarPresenter> implements ICar.Vie
             item.selectEdit = bool;
         }
         totalSelectOrder();
+        carListAdapter.notifyDataSetChanged();
     }
 
     /**
      * 下单状态下的总数和价格的计算
      */
-    private void totalSelectOrder() {
+    private boolean totalSelectOrder() {
         int num = 0;
         int totalPrice = 0;
+        //判断是否是全选
         boolean isSelectAll = true;
         for (CarBean.DataBean.CartListBean item : carBean.getData().getCartList()) {
             if (item.selectOrder) {
+                //总数和总价格
                 num += item.getNumber();
                 totalPrice += item.getNumber() * item.getRetail_price();
             } else {
+                //没全选设为false
                 if (isSelectAll) {
                     isSelectAll = false;
                 }
@@ -139,6 +276,32 @@ public class ShopFragment extends BaseFragment<CarPresenter> implements ICar.Vie
         checkBoxAll.setText(strAll);
         txtTotalPrice.setText("￥" + totalPrice);
         checkBoxAll.setChecked(isSelectAll);
+        return isSelectAll;
+    }
+
+    /**
+     * 编辑状态下的
+     */
+    private boolean totalSelectEdit(){
+        int num = 0;
+        //判断是否是全选
+        boolean isSelectAll = true;
+        for(CarBean.DataBean.CartListBean item:listBeans){
+            if(item.selectEdit){
+                //获取总数
+                num += item.getNumber();
+            }else{
+                //没全选设为false
+                if(isSelectAll){
+                    isSelectAll = false;
+                }
+            }
+        }
+        String strAll = "全选($)";
+        strAll = strAll.replace("$",String.valueOf(num));
+        checkBoxAll.setText(strAll);
+        //返回是否是全选
+        return isSelectAll;
     }
 
 
@@ -161,10 +324,25 @@ public class ShopFragment extends BaseFragment<CarPresenter> implements ICar.Vie
         if ("编辑".equals(txtEdit.getText().toString())) {
             txtEdit.setText("完成");
             txtSubmit.setText("删除所选");
+            //是否是编译状态
+            isEdit=true;
+            //设置价格显示和隐藏
+            txtTotalPrice.setVisibility(View.GONE);
+
         } else if ("完成".equals(txtEdit.getText().toString())) {
             txtEdit.setText("编辑");
             txtSubmit.setText("下单");
+            //是否是编译状态
+            isEdit=false;
+            //
+            updateGoodSelectStateEdit(false);
+            //设置价格显示和隐藏
+            txtTotalPrice.setVisibility(View.VISIBLE);
         }
+        //传值判断是否是编辑状态
+        carListAdapter.setEditState(isEdit);
+        //刷新适配器
+        carListAdapter.notifyDataSetChanged();
     }
 
     /**
@@ -175,7 +353,31 @@ public class ShopFragment extends BaseFragment<CarPresenter> implements ICar.Vie
             //下单
         } else if ("删除所选".equals(txtSubmit.getText().toString())) {
             //删除购物车所选数据
+            deleteCar();
         }
+    }
+
+    /**
+     *删除所有选中的商品数据
+     */
+    private void deleteCar() {
+        StringBuilder sb = new StringBuilder();
+        //循环判断是否是点中状态
+        for(CarBean.DataBean.CartListBean item:listBeans){
+            if(item.selectEdit){
+                //获取没一个id
+                sb.append(item.getProduct_id());
+                sb.append(",");
+            }
+        }
+        if(sb.length() > 0){
+            sb.deleteCharAt(sb.length()-1);
+        }
+        Log.i("TAG",sb.toString());
+        //调用删除的方法删除
+        presenter.deleteCar(sb.toString());
+
+//        carListAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -185,6 +387,8 @@ public class ShopFragment extends BaseFragment<CarPresenter> implements ICar.Vie
         listBeans.addAll(cartList);
         carListAdapter.notifyDataSetChanged();
     }
+
+
 
     @Override
     public void showLoading(int visible) {

@@ -1,5 +1,6 @@
 package com.example.shopping_android_app;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -30,6 +31,10 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
+
+        int id = getIntent().getIntExtra("id", 0);
+        navView.setSelectedItemId(navView.getMenu().getItem(id).getItemId());
+
 
         navView.setOnNavigationItemReselectedListener(new BottomNavigationView.OnNavigationItemReselectedListener() {
             @Override

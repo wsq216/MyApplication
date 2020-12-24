@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.bumptech.glide.Glide;
+import com.example.shopping_android_app.MainActivity;
 import com.example.shopping_android_app.R;
 import com.example.shopping_android_app.adapter.CarImgAdapter;
 import com.example.shopping_android_app.adapter.DetailsAdapter;
@@ -33,6 +34,8 @@ import com.example.shopping_android_app.base.BaseAdapter;
 import com.example.shopping_android_app.interfaces.home.IDetail;
 import com.example.shopping_android_app.model.home.details.DetailsBase;
 import com.example.shopping_android_app.model.home.details.RelatedBase;
+import com.example.shopping_android_app.model.home.shop.AddCarBean;
+import com.example.shopping_android_app.model.home.shop.DeleteCarBean;
 import com.example.shopping_android_app.presenter.home.DetailsPresenter;
 import com.example.shopping_android_app.ui.login.LoginActivity;
 import com.example.shopping_android_app.utils.SpUtils;
@@ -41,7 +44,9 @@ import com.youth.banner.loader.ImageLoader;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -53,7 +58,7 @@ import io.realm.RealmConfiguration;
 
 public class CarActivity extends BaseActivity<IDetail.Presenter> implements IDetail.View {
 
-//    @BindView(R.id.webView)
+    //    @BindView(R.id.webView)
 //    WebView webView;
     @BindView(R.id.banner)
     Banner banner;
@@ -125,6 +130,7 @@ public class CarActivity extends BaseActivity<IDetail.Presenter> implements IDet
     private PopupWindow popupWindow;
     private TextView num;
     int i = 1;
+    private DetailsBase detailsBase1;
 
     @Override
     protected int getLayout() {
@@ -154,6 +160,9 @@ public class CarActivity extends BaseActivity<IDetail.Presenter> implements IDet
         String str = realm.getPath();
         Log.i(TAG, str);
 
+        imgCollect.setTag(0);
+        imgCollect.setOnClickListener(this::onClick);
+        layoutCar.setOnClickListener(this::onClick);
     }
 
     @Override
@@ -206,21 +215,21 @@ public class CarActivity extends BaseActivity<IDetail.Presenter> implements IDet
     private void showImage(String goods_desc) {
         List<String> listUrl = new ArrayList<>();
 
-        String str=null;
+        String str = null;
         String[] image = goods_desc.split("http");
         for (int i = 0; i < image.length; i++) {
             String[] url = image[i].split("jpg");
-            if (url.length!=0){
+            if (url.length != 0) {
                 for (int j = 0; j < url.length - 1; j++) {
-                    str="http" + url[0] + "jpg";
+                    str = "http" + url[0] + "jpg";
                     if (!listUrl.contains(str))
                         listUrl.add(str);
                 }
             }
             String[] urls = image[i].split("png");
-            if (urls.length!=0){
+            if (urls.length != 0) {
                 for (int j = 0; j < urls.length - 1; j++) {
-                    str="http" + urls[0] + "png";
+                    str = "http" + urls[0] + "png";
                     if (!listUrl.contains(str))
                         listUrl.add(str);
                 }
@@ -228,17 +237,17 @@ public class CarActivity extends BaseActivity<IDetail.Presenter> implements IDet
 
         }
         rvImg.setLayoutManager(new LinearLayoutManager(this));
-        CarImgAdapter carImgAdapter = new CarImgAdapter(this,listUrl);
+        CarImgAdapter carImgAdapter = new CarImgAdapter(this, listUrl);
         rvImg.setAdapter(carImgAdapter);
 
-        Toast.makeText(this,listUrl.get(0) , Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, listUrl.get(0), Toast.LENGTH_SHORT).show();
 
         carImgAdapter.addListClick(new BaseAdapter.IListClick() {
             @Override
             public void itemClick(int pos) {
                 Intent intent = new Intent(CarActivity.this, BigImageActivity.class);
                 intent.putExtra("listUrl", (Serializable) listUrl);
-                intent.putExtra("id", pos );
+                intent.putExtra("id", pos);
                 startActivity(intent);
             }
         });
@@ -247,9 +256,11 @@ public class CarActivity extends BaseActivity<IDetail.Presenter> implements IDet
     }
 
     private static final String TAG = "CarActivity";
+    public static final int RECOMMEND_CAR = 1000; //打开购物车的指令
 
     @Override
     public void getDetails(DetailsBase detailsBase) {
+        detailsBase1 = detailsBase;
         if (detailsBase != null) {
             //详情图【片
             List<DetailsBase.DataBeanX.GalleryBean> gallery = detailsBase.getData().getGallery();
@@ -355,6 +366,16 @@ public class CarActivity extends BaseActivity<IDetail.Presenter> implements IDet
     public void onClick(View view) {
         if (!TextUtils.isEmpty(SpUtils.getInstance().getString("token"))) {
             switch (view.getId()) {
+                case R.id.img_collect:
+                    int tag1 = (int) imgCollect.getTag();
+                    if (tag1 == 0) {
+                        imgCollect.setImageResource(R.mipmap.ic_collect_select);
+                        imgCollect.setTag(1);
+                    } else {
+                        imgCollect.setImageResource(R.mipmap.ic_collect_normal);
+                        imgCollect.setTag(0);
+                    }
+                    break;
                 case R.id.jian:
                     i--;
                     i = i <= 0 ? 1 : i;
@@ -368,6 +389,9 @@ public class CarActivity extends BaseActivity<IDetail.Presenter> implements IDet
                         num.setText(i + "");
                     }
 
+                    break;
+                case R.id.layout_car:
+                    openGoodCar();
                     break;
                 case R.id.txt_no:
                     txtAddCar.setTag(0);
@@ -384,12 +408,65 @@ public class CarActivity extends BaseActivity<IDetail.Presenter> implements IDet
                         txtNumber.setText(s + s1 + "");
                         popupWindow.dismiss();
                         txtAddCar.setTag(0);
+
+                        Toast toast = new Toast(getApplicationContext());
+
+                        addCar();
+
+                        //创建一个填充物,用于填充Toast
+                        LayoutInflater inflater = LayoutInflater.from(CarActivity.this);
+
+                        //填充物来自的xml文件,在这个改成一个view
+                        //实现xml到view的转变哦
+                        View viewToast = inflater.inflate(R.layout.toast, null);
+
+                        //不一定需要，找到xml里面的组件，设置组件里面的具体内容
+                        ImageView tick = viewToast.findViewById(R.id.image_tick);
+                        TextView desc = viewToast.findViewById(R.id.tv_desc);
+                        tick.setImageResource(R.drawable.tick);
+                        desc.setText("添加成功");
+
+                        //把填充物放进toast
+                        toast.setView(viewToast);
+                        toast.setDuration(Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.CENTER, 0, 0);
+                        //展示toast
+                        toast.show();
                     }
                     break;
             }
-        }else {
+        } else {
             startActivity(new Intent(CarActivity.this, LoginActivity.class));
         }
+    }
+
+    /**
+     * 添加进购物车
+     */
+    private void addCar() {
+        if (i<0){
+            Toast.makeText(this, "数量不够", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (detailsBase1.getData().getProductList().size()>0){
+            int goodsId = this.detailsBase1.getData().getProductList().get(0).getGoods_id();
+            int productid = this.detailsBase1.getData().getProductList().get(0).getId();
+            Map<String,String> map = new HashMap<>();
+            map.put("goodsId",String.valueOf(goodsId));
+            map.put("number",String.valueOf(i));
+            map.put("productId",String.valueOf(productid));
+            presenter.addGoodCar(map);
+        }
+    }
+
+    /**
+     * 打开购物车
+     */
+    private void openGoodCar(){
+        Intent intent = new Intent();
+        intent.setClass(CarActivity.this, MainActivity.class);
+        intent.putExtra("id",3);//其中1表示Fragment的编号，从0开始编，secondFra的编号为1
+        startActivity(intent);
     }
 
 
@@ -443,6 +520,11 @@ public class CarActivity extends BaseActivity<IDetail.Presenter> implements IDet
         DetailsAdapter detailsAdapter = new DetailsAdapter(this, brandIdBase.getData().getGoodsList());
 
         rvList.setAdapter(detailsAdapter);
+    }
+
+    @Override
+    public void addGoodCarReturn(AddCarBean addCarBean) {
+
     }
 
 }

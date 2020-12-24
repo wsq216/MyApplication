@@ -25,8 +25,10 @@ public class NumberSelect extends LinearLayout implements View.OnClickListener {
         return number;
     }
 
+    //获取总数量
     public void setNumber(int number) {
         this.number = number;
+        initTxtNumber();
     }
 
     private int number; //当前的数字
@@ -44,20 +46,26 @@ public class NumberSelect extends LinearLayout implements View.OnClickListener {
     }
 
     public void addPage(int layout){
+        removeAllViews();
         View view = LayoutInflater.from(getContext()).inflate(layout,this,false);
         addView(view);
         txtReduce = view.findViewById(R.id.txt_reduce);
         txtNumber = view.findViewById(R.id.txt_number);
         txtAdd = view.findViewById(R.id.txt_add);
+        txtReduce.setOnClickListener(this);
+        txtAdd.setOnClickListener(this);
+        initTxtNumber();
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.txt_reduce:
+                //减的监听
                 numberReduce();
                 break;
             case R.id.txt_add:
+                //加的监听
                 numberAdd();
                 break;
         }
@@ -77,6 +85,13 @@ public class NumberSelect extends LinearLayout implements View.OnClickListener {
         txtNumber.setText(String.valueOf(number));
         if(changeNumber != null){
             changeNumber.change(number);
+        }
+    }
+
+    //设置数量
+    private void initTxtNumber(){
+        if(txtNumber != null){
+            txtNumber.setText(String.valueOf(getNumber()));
         }
     }
 

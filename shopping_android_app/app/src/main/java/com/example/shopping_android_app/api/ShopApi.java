@@ -15,9 +15,14 @@ import com.example.shopping_android_app.model.home.details.DetailsBase;
 import com.example.shopping_android_app.model.home.details.RelatedBase;
 import com.example.shopping_android_app.model.home.login.LoginBean;
 import com.example.shopping_android_app.model.home.login.RegisterBean;
+import com.example.shopping_android_app.model.home.shop.AddCarBean;
 import com.example.shopping_android_app.model.home.shop.CarBean;
+import com.example.shopping_android_app.model.home.shop.DeleteCarBean;
+import com.example.shopping_android_app.model.home.shop.UpdateCarBean;
+import com.example.shopping_android_app.model.home.topic.TopicBean;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import io.reactivex.Flowable;
 import retrofit2.http.Field;
@@ -71,6 +76,10 @@ public interface ShopApi {
     @GET("api/goods/list?")
     Flowable<HotGoodListBean> getHotGoodList(@QueryMap HashMap<String, String> map);
 
+    //https://cdplay.cn/api/topic/list
+    //专题列表数据
+    @GET("api/topic/list")
+    Flowable<TopicBean> getTopicList();
 
     //https://cdplay.cn/api/goods/detail?id=1009024
     //商品购买详情页
@@ -104,14 +113,27 @@ public interface ShopApi {
     Flowable<RegisterBean> getreister(@Field("username") String username, @Field("password") String pw);
 
 
-    //添加到购物车
-    @POST("api/cart/add")
-    @FormUrlEncoded
-    Flowable<LoginBean> addCar(@FieldMap HashMap<String,String> map);
+
 
     //购物车列表
     @GET("api/cart/index")
     Flowable<CarBean> getCarList();
+
+
+    //添加到购物车
+    @POST("api/cart/add")
+    @FormUrlEncoded
+    Flowable<AddCarBean> addCar(@FieldMap Map<String,String> map);
+
+    //更新购物车的数据
+    @POST("api/cart/update")
+    @FormUrlEncoded
+    Flowable<UpdateCarBean> updateCar(@FieldMap Map<String,String> map);
+
+    //删除购物车数据
+    @POST("api/cart/delete")
+    @FormUrlEncoded
+    Flowable<DeleteCarBean> deleteCar(@Field("productIds") String productIds);
 
 
 }
