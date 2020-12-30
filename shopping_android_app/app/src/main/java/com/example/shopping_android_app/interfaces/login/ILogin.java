@@ -6,6 +6,7 @@ import com.example.shopping_android_app.interfaces.IBaseModel;
 import com.example.shopping_android_app.interfaces.IBasePresenter;
 import com.example.shopping_android_app.interfaces.IBaseView;
 import com.example.shopping_android_app.model.home.login.LoginBean;
+import com.example.shopping_android_app.model.home.login.LogoutBase;
 import com.example.shopping_android_app.model.home.login.RegisterBean;
 
 public interface ILogin {

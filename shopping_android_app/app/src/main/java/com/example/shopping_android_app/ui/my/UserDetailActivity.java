@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,9 +33,15 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.shopping_android_app.R;
 import com.example.shopping_android_app.app.Constants;
+import com.example.shopping_android_app.base.BaseActivity;
+import com.example.shopping_android_app.interfaces.login.ILogin;
 import com.example.shopping_android_app.interfaces.me.IUser;
+import com.example.shopping_android_app.model.home.login.LoginBean;
+import com.example.shopping_android_app.model.home.login.LogoutBase;
+import com.example.shopping_android_app.model.home.login.RegisterBean;
 import com.example.shopping_android_app.model.home.me.UserInfoBean;
 import com.example.shopping_android_app.presenter.home.UserPresenter;
+import com.example.shopping_android_app.presenter.home.login.LoginPresenter;
 import com.example.shopping_android_app.utils.BitmapUtils;
 import com.example.shopping_android_app.utils.GlideEngine;
 import com.example.shopping_android_app.utils.SpUtils;
@@ -43,7 +50,6 @@ import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,7 +58,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class UserDetailActivity extends AppCompatActivity implements IUser.View {
+public class UserDetailActivity extends BaseActivity<IUser.Presenter> implements IUser.View{
 
     @BindView(R.id.iv_return)
     ImageView ivReturn;
@@ -72,7 +78,8 @@ public class UserDetailActivity extends AppCompatActivity implements IUser.View 
     TextView txtNickname;
     @BindView(R.id.layout_nickname)
     ConstraintLayout layoutNickname;
-    private Unbinder unbinder;
+    @BindView(R.id.btn_loginout)
+    Button btnLoginout;
 
     private OSS ossClient;
     String bucketName = "2002a";
@@ -80,36 +87,53 @@ public class UserDetailActivity extends AppCompatActivity implements IUser.View 
 
     String key = "LTAI4GH6Gy8tFbbXJ3vatsAn";  //appkey
     String secret = "YjWyqsTnHX8336jRZ1vg7FSWaojPf8";  //密码
-    private IUser.Presenter presenter;
-
 
     @Override
     protected void onStart() {
         super.onStart();
         String username = SpUtils.getInstance().getString("username");
-        if (username!=null){
+        if (username != null) {
             Glide.with(this).load(username).apply(new RequestOptions().circleCrop()).into(imgAvatar);
         }
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_detail);
-        unbinder = ButterKnife.bind(this);
 
-        initData();
+    @Override
+    protected int getLayout() {
+        return R.layout.activity_user_detail;
+    }
+
+    @Override
+    protected IUser.Presenter createPrenter() {
+        return new UserPresenter();
+
+    }
+
+    @Override
+    protected void initView() {
         initOss();
+
+    }
+
+    @Override
+    protected void initData() {
         imgAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openPhoto();
             }
         });
-    }
 
-    private void initData() {
-        presenter = new UserPresenter();
+        btnLoginout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (SpUtils.getInstance().getString("token")!=null){
+                    presenter.logout();
+                }else{
+                    Toast.makeText(UserDetailActivity.this, "请先登录", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     private void openPhoto() {
@@ -122,7 +146,7 @@ public class UserDetailActivity extends AppCompatActivity implements IUser.View 
                 .forResult(PictureConfig.CHOOSE_REQUEST);
     }
 
-    private void initOss(){
+    private void initOss() {
         OSSCredentialProvider credentialProvider = new OSSStsTokenCredentialProvider(key, secret, "");
         // 配置类如果不设置，会有默认配置。
         ClientConfiguration conf = new ClientConfiguration();
@@ -132,26 +156,28 @@ public class UserDetailActivity extends AppCompatActivity implements IUser.View 
         conf.setMaxErrorRetry(2); // 失败后最大重试次数，默认2次。
         ossClient = new OSSClient(getApplicationContext(), ossPoint, credentialProvider);
     }
+
     /**
      * oss上传
+     *
      * @param path
      */
-    private void uploadHead(String path){
+    private void uploadHead(String path) {
 
-        String fileName = path.substring(path.lastIndexOf("/")+1,path.length());
+        String fileName = path.substring(path.lastIndexOf("/") + 1, path.length());
         PutObjectRequest put = new PutObjectRequest(bucketName, fileName, path);
         put.setProgressCallback(new OSSProgressCallback<PutObjectRequest>() {
             @Override
             public void onProgress(PutObjectRequest request, long currentSize, long totalSize) {
                 //上次进度
-                Log.i("oss_upload",currentSize+"/"+totalSize);
+                Log.i("oss_upload", currentSize + "/" + totalSize);
                 // 进度百分比的计算
                 // int p = (int) (currentSize/totalSize*100);
-                if(currentSize == totalSize){
+                if (currentSize == totalSize) {
                     //完成
                     String headUrl = request.getUploadFilePath();
                     //
-                    Log.i("HeadUrl",headUrl);
+                    Log.i("HeadUrl", headUrl);
                     //request.getUploadFilePath()
                 }
 
@@ -164,14 +190,14 @@ public class UserDetailActivity extends AppCompatActivity implements IUser.View 
                 Log.d("ETag", result.getETag());
                 Log.d("RequestId", result.getRequestId());
                 //成功的回调中读取相关的上传文件的信息  生成一个url地址
-                String url = ossClient.presignPublicObjectURL(request.getBucketName(),request.getObjectKey());
+                String url = ossClient.presignPublicObjectURL(request.getBucketName(), request.getObjectKey());
                 //调用服务器接口 把url上传到服务器的接口
-                SpUtils.getInstance().setValue("username",url);
+                SpUtils.getInstance().setValue("username", url);
 
                 updateHead(url);
-//                Map<String,String> map = new HashMap<>();
-//                map.put("avatar",url);
-//                presenter.updateUserInfo(map);
+                Map<String,String> map = new HashMap<>();
+                map.put("avatar",url);
+                presenter.updateUserInfo(map);
             }
 
             @Override
@@ -191,6 +217,7 @@ public class UserDetailActivity extends AppCompatActivity implements IUser.View 
             }
         });
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -202,12 +229,12 @@ public class UserDetailActivity extends AppCompatActivity implements IUser.View 
                 //头像的压缩和二次采样
                 //把选中的图片插入到列表
                 try {
-                    Bitmap scaleBitmp = BitmapUtils.getBitmap(selectList.get(0).getPath(), Constants.HEAD_WIDTH,Constants.HEAD_HEIGHT);
-                    Uri uri=Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), scaleBitmp, null,null));
+                    Bitmap scaleBitmp = BitmapUtils.getBitmap(selectList.get(0).getPath(), Constants.HEAD_WIDTH, Constants.HEAD_HEIGHT);
+                    Uri uri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), scaleBitmp, null, null));
                     //uri转字符串
                     String path = getRealPathFromUri(UserDetailActivity.this, uri);
                     uploadHead(path);
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
 
@@ -222,7 +249,7 @@ public class UserDetailActivity extends AppCompatActivity implements IUser.View 
     public static String getRealPathFromUri(UserDetailActivity context, Uri contentUri) {
         Cursor cursor = null;
         try {
-            String[] proj = { MediaStore.Images.Media.DATA };
+            String[] proj = {MediaStore.Images.Media.DATA};
             cursor = context.getContentResolver().query(contentUri, proj, null, null, null);
             int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
             cursor.moveToFirst();
@@ -233,7 +260,8 @@ public class UserDetailActivity extends AppCompatActivity implements IUser.View 
             }
         }
     }
-    private void updateHead(String url){
+
+    private void updateHead(String url) {
         imgAvatar.post(new Runnable() {
             @Override
             public void run() {
@@ -242,18 +270,19 @@ public class UserDetailActivity extends AppCompatActivity implements IUser.View 
         });
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        unbinder.unbind();
-    }
 
     @Override
     public void updateUserInfoReturn(UserInfoBean result) {
-        if(result.getErrno() == 0){
+        if (result.getErrno() == 0) {
             Toast.makeText(this, "修改成功", Toast.LENGTH_SHORT).show();
         }
     }
+
+    @Override
+    public void logout(LogoutBase logoutBase) {
+
+    }
+
 
     @Override
     public void showLoading(int visible) {

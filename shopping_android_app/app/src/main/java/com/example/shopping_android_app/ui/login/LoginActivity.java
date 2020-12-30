@@ -17,6 +17,7 @@ import com.example.shopping_android_app.R;
 import com.example.shopping_android_app.base.BaseActivity;
 import com.example.shopping_android_app.interfaces.login.ILogin;
 import com.example.shopping_android_app.model.home.login.LoginBean;
+import com.example.shopping_android_app.model.home.login.LogoutBase;
 import com.example.shopping_android_app.model.home.login.RegisterBean;
 import com.example.shopping_android_app.presenter.home.login.LoginPresenter;
 import com.example.shopping_android_app.ui.register.RegisterActivity;
@@ -118,6 +119,8 @@ public class LoginActivity extends BaseActivity<ILogin.Presenter> implements ILo
     public void getRegister(RegisterBean registerBean) {
 
     }
+
+
 
 
 }

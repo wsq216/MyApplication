@@ -1,11 +1,14 @@
 package com.example.shopping_android_app.presenter.home.login;
 
 
+import android.util.Log;
+
 import com.example.shopping_android_app.base.BasePresenter;
 import com.example.shopping_android_app.interfaces.Callback;
 import com.example.shopping_android_app.interfaces.login.ILogin;
 import com.example.shopping_android_app.model.home.login.LoginBean;
 import com.example.shopping_android_app.model.home.login.LoginModel;
+import com.example.shopping_android_app.model.home.login.LogoutBase;
 import com.example.shopping_android_app.model.home.login.RegisterBean;
 
 public class LoginPresenter extends BasePresenter<ILogin.View> implements ILogin.Presenter {
@@ -46,4 +49,6 @@ public class LoginPresenter extends BasePresenter<ILogin.View> implements ILogin
             }
         });
     }
+
+
 }

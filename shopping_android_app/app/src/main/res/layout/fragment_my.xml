@@ -81,11 +81,6 @@
         android:numColumns="3"
         android:verticalSpacing="24dp" />
 
-    <Button
-        android:id="@+id/btn_loginout"
-        android:layout_width="match_parent"
-        android:layout_height="126dp"
-        android:text="退出登录"
-         />
+
 
 </LinearLayout>

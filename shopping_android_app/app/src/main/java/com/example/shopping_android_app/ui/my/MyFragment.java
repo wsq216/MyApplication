@@ -42,8 +42,6 @@ public class MyFragment extends BaseFragment {
     TextView txtMark;
     @BindView(R.id.layout_userinfo)
     ConstraintLayout layoutUserinfo;
-    @BindView(R.id.btn_loginout)
-    Button btnLoginout;
 
     @Override
     protected BasePresenter createPersenter() {

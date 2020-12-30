@@ -16,6 +16,7 @@ import com.example.shopping_android_app.model.home.catalog.CatalogListBase;
 import com.example.shopping_android_app.model.home.details.DetailsBase;
 import com.example.shopping_android_app.model.home.details.RelatedBase;
 import com.example.shopping_android_app.model.home.login.LoginBean;
+import com.example.shopping_android_app.model.home.login.LogoutBase;
 import com.example.shopping_android_app.model.home.login.RegisterBean;
 import com.example.shopping_android_app.model.home.me.UserInfoBean;
 import com.example.shopping_android_app.model.home.shop.AddCarBean;
@@ -115,7 +116,10 @@ public interface ShopApi {
     @FormUrlEncoded
     Flowable<RegisterBean> getreister(@Field("username") String username, @Field("password") String pw);
 
-
+    //退出登录
+    //https://cdplay.cn/api/auth/logout
+    @POST("api/auth/logout")
+    Flowable<LogoutBase> logout();
 
 
     //购物车列表
@@ -164,5 +168,7 @@ public interface ShopApi {
     @POST("api/user/updateUserInfo")
     @FormUrlEncoded
     Flowable<UserInfoBean> updateUserInfo(@FieldMap Map<String,String> map);
+
+
 
 }

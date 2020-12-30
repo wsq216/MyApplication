@@ -5,6 +5,7 @@ package com.example.shopping_android_app.presenter.home;
 import com.example.shopping_android_app.base.BasePresenter;
 import com.example.shopping_android_app.interfaces.Callback;
 import com.example.shopping_android_app.interfaces.me.IUser;
+import com.example.shopping_android_app.model.home.login.LogoutBase;
 import com.example.shopping_android_app.model.home.me.UserInfoBean;
 import com.example.shopping_android_app.model.home.me.UserModel;
 
@@ -34,5 +35,20 @@ public class UserPresenter extends BasePresenter<IUser.View> implements IUser.Pr
             }
         });
     }
+    @Override
+    public void logout() {
+        model.logout(new Callback<LogoutBase>() {
+            @Override
+            public void success(LogoutBase data) {
+                if(mView != null){
+                    mView.logout(data);
+                }
+            }
 
+            @Override
+            public void fail(String err) {
+
+            }
+        });
+    }
 }

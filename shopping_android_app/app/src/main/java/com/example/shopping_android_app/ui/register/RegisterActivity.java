@@ -16,6 +16,7 @@ import com.example.shopping_android_app.R;
 import com.example.shopping_android_app.base.BaseActivity;
 import com.example.shopping_android_app.interfaces.login.ILogin;
 import com.example.shopping_android_app.model.home.login.LoginBean;
+import com.example.shopping_android_app.model.home.login.LogoutBase;
 import com.example.shopping_android_app.model.home.login.RegisterBean;
 import com.example.shopping_android_app.presenter.home.login.LoginPresenter;
 
@@ -125,12 +126,16 @@ public class RegisterActivity extends BaseActivity<ILogin.Presenter> implements 
 
     @Override
     public void getRegister(RegisterBean registerBean) {
-        String token = registerBean.getData().getToken();
-        if (!TextUtils.isEmpty(token)){
+
+        if (registerBean.getErrno()==0){
             Toast.makeText(this, "注册成功！", Toast.LENGTH_SHORT).show();
             finish();
+        }else if (registerBean.getErrno()==1000){
+            Toast.makeText(this, "用户名已注册！", Toast.LENGTH_SHORT).show();
+//            finish();
         }
     }
+
 
 
 }
