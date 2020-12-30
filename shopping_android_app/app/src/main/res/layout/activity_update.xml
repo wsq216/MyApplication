@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.shop.UpdateActivity">
+    <EditText
+        android:id="@+id/ed_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="姓名"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/ed_phone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="手机号码"
+        app:layout_constraintTop_toBottomOf="@id/ed_name" />
+
+    <EditText
+        android:id="@+id/ed_area"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="省份 城市 区县"
+        app:layout_constraintTop_toBottomOf="@id/ed_phone" />
+
+    <EditText
+        android:id="@+id/ed_street"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="详细地址 如街道 楼盘号等"
+        app:layout_constraintTop_toBottomOf="@id/ed_area" />
+
+    <CheckBox
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:id="@+id/rd_default"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="设为默认地址"
+        app:layout_constraintTop_toBottomOf="@id/ed_street" />
+    <LinearLayout
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/btn_not"
+            android:layout_weight="1"
+            android:text="取消"
+            android:textColor="#fff"
+            android:background="#454343"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+        <Button
+            android:id="@+id/btn_ok"
+            android:layout_weight="1"
+            android:text="确定"
+            android:background="#DC2121"
+            android:textColor="#fff"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

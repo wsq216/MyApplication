@@ -11,8 +11,8 @@ import com.example.shopping_android_app.utils.RxUtils;
 public class LoginModel extends BaseModel implements ILogin.Model {
     @Override
     public void login(String username,String pw, Callback callback) {
-        addDisposible(HttpmManager.getHttpmManager().getShopApi().login(username,pw).
-                compose(RxUtils.rxScheduler())
+        addDisposible(HttpmManager.getHttpmManager().getShopApi().login(username,pw)
+                .compose(RxUtils.rxScheduler())
                 .subscribeWith(new CommonSubscriber<LoginBean>(callback) {
                     @Override
                     public void onNext(LoginBean loginBean) {

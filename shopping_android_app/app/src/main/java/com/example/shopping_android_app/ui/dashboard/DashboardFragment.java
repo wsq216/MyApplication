@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.shopping_android_app.R;
@@ -90,6 +91,8 @@ public class DashboardFragment extends BaseFragment<TopicPresenter> implements I
 
                 linear.addView(inflate);
             }
+        }else {
+            Toast.makeText(getActivity(), "请求数据为空", Toast.LENGTH_SHORT).show();
         }
     }
 

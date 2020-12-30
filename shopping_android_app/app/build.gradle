@@ -70,6 +70,14 @@ dependencies {
     implementation 'com.github.dfqin:grantor:2.5'
     implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0'
 
+    //oss
+    implementation 'com.aliyun.dpa:oss-android-sdk:+'
+    //本地相机相册选择图片
+    implementation 'com.github.LuckSiege.PictureSelector:picture_library:v2.5.3'
 
     implementation 'q.rorbin:VerticalTabLayout:1.2.5'
+
+//侧滑删除 条目
+    implementation 'com.yanzhenjie:recyclerview-swipe:1.1.4'
+
 }

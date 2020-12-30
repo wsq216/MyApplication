@@ -2,7 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/dp_60"
+    android:layout_margin="@dimen/dp_5"
+    android:layout_height="@dimen/dp_100"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <CheckBox
@@ -79,6 +80,7 @@
         app:layout_constraintRight_toRightOf="@id/txt_edit_title"
         android:layout_marginTop="@dimen/dp_20"
         android:visibility="gone"></com.example.shopping_android_app.widget.NumberSelect>
+
 
 
 

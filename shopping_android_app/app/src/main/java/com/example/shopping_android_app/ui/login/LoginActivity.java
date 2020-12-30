@@ -41,6 +41,7 @@ public class LoginActivity extends BaseActivity<ILogin.Presenter> implements ILo
     Button btnLogin;
     @BindView(R.id.register)
     TextView register;
+    private String username;
 
     @Override
     protected int getLayout() {
@@ -87,7 +88,7 @@ public class LoginActivity extends BaseActivity<ILogin.Presenter> implements ILo
     }
 
     private void login() {
-        String username = inputUsername.getText().toString();
+        username = inputUsername.getText().toString();
         String pw = inputPw.getText().toString();
         if (!TextUtils.isEmpty(username) && !TextUtils.isEmpty(pw)) {
             presenter.login(username, pw);
@@ -106,6 +107,9 @@ public class LoginActivity extends BaseActivity<ILogin.Presenter> implements ILo
         if (!TextUtils.isEmpty(loginBean.getData().getToken())) {
             SpUtils.getInstance().setValue("token", loginBean.getData().getToken());
             SpUtils.getInstance().setValue("uid", loginBean.getData().getUserInfo().getUid());
+            Intent intent = getIntent();
+            intent.putExtra("name",username);
+            setResult(100,intent);
             finish();
         }
     }
@@ -114,5 +118,6 @@ public class LoginActivity extends BaseActivity<ILogin.Presenter> implements ILo
     public void getRegister(RegisterBean registerBean) {
 
     }
+
 
 }

@@ -1,6 +1,8 @@
 package com.example.shopping_android_app.ui.channel;
 
 import android.Manifest;
+import android.content.Intent;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -9,6 +11,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.example.shopping_android_app.R;
 import com.example.shopping_android_app.adapter.CategoryAdapter;
+import com.example.shopping_android_app.base.BaseAdapter;
 import com.example.shopping_android_app.base.BaseFragment;
 import com.example.shopping_android_app.base.BasePresenter;
 import com.example.shopping_android_app.interfaces.home.IHome;
@@ -16,6 +19,7 @@ import com.example.shopping_android_app.model.home.CategoryBean;
 import com.example.shopping_android_app.model.home.CategoryListBean;
 import com.example.shopping_android_app.model.home.HomeBean;
 import com.example.shopping_android_app.presenter.home.HomePresenter;
+import com.example.shopping_android_app.ui.details.CarActivity;
 
 import java.io.Serializable;
 import java.util.List;
@@ -91,5 +95,15 @@ public class CategroryFragment extends BaseFragment<HomePresenter> implements IH
         CategoryAdapter categoryAdapter = new CategoryAdapter(getActivity(),data);
 
         rv_categroy.setAdapter(categoryAdapter);
+
+        categoryAdapter.addListClick(new BaseAdapter.IListClick() {
+            @Override
+            public void itemClick(int pos) {
+                CategoryListBean.DataBeanX.DataBean goodsListBean = data.get(pos);
+                Intent intent = new Intent(getActivity(), CarActivity.class);
+                intent.putExtra("id", goodsListBean.getId());
+                startActivity(intent);
+            }
+        });
     }
 }

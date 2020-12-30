@@ -2,12 +2,16 @@ package com.example.shopping_android_app.dao;
 
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
+import io.realm.annotations.Required;
 
 public class DbUtils extends RealmObject {
-    @PrimaryKey
+
+    @Required
     private String id;
     private String name;
-    private String pwd;
+    private String price;
+    private String url;
+
 
     public String getId() {
         return id;
@@ -17,6 +21,9 @@ public class DbUtils extends RealmObject {
         this.id = id;
     }
 
+
+
+
     public String getName() {
         return name;
     }
@@ -25,11 +32,19 @@ public class DbUtils extends RealmObject {
         this.name = name;
     }
 
-    public String getPwd() {
-        return pwd;
+    public String getPrice() {
+        return price;
     }
 
-    public void setPwd(String pwd) {
-        this.pwd = pwd;
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

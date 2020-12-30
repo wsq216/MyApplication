@@ -1,5 +1,6 @@
 package com.example.shopping_android_app.model.home.shop;
 
+import java.io.Serializable;
 import java.util.List;
 
 public class CarBean {
@@ -109,7 +110,7 @@ public class CarBean {
             }
         }
 
-        public static class CartListBean {
+        public static class CartListBean implements Serializable {
             /**
              * id : 636
              * user_id : 5

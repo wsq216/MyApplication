@@ -34,6 +34,7 @@ import butterknife.OnClick;
 
 public class HotGoodActivity extends BaseActivity<IHotGood.Presenter> implements IHotGood.View, View.OnClickListener {
 
+    //接口参数
     private static final String ASC = "asc";
     private static final String DESC = "desc";
     private static final String DEFAULT = "default";
@@ -119,6 +120,7 @@ public class HotGoodActivity extends BaseActivity<IHotGood.Presenter> implements
         presenter.getHotGood(getParam());
         presenter.getHot();
 
+        //创建pop
         newPop();
     }
 
@@ -156,6 +158,7 @@ public class HotGoodActivity extends BaseActivity<IHotGood.Presenter> implements
                 }
                 break;
             case R.id.txt_all:
+                //恢复到默认状态
                 resetPriceState();
                 txtAll.setTextColor(Color.parseColor(HotGoodActivity.this.getString(R.color.red)));
                 sort = DEFAULT;
@@ -165,9 +168,10 @@ public class HotGoodActivity extends BaseActivity<IHotGood.Presenter> implements
                 }
                 break;
             case R.id.txt_sort:
+                //恢复到默认状态
                 resetPriceState();
                 txtSort.setTextColor(Color.parseColor(HotGoodActivity.this.getString(R.color.red)));
-
+                //弹出弹框
                 initPop();
                 break;
         }
@@ -175,6 +179,7 @@ public class HotGoodActivity extends BaseActivity<IHotGood.Presenter> implements
 
     @SuppressLint("ResourceType")
     private void initPop() {
+        //显示pop
         popupWindow.showAsDropDown(txtSort);
 
 

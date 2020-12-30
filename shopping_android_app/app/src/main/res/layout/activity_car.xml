@@ -28,22 +28,26 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/sp_12"
+                    android:gravity="center"
+                    android:drawableLeft="@mipmap/yuan"
                     android:layout_margin="@dimen/dp_5"
-                    android:text="○30天无忧退货"/>
+                    android:text="30天无忧退货"/>
                 <TextView
                     android:layout_weight="1"
                     android:layout_width="wrap_content"
                     android:textSize="@dimen/sp_12"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/dp_5"
-                    android:text="○48小时快速退款"/>
+                    android:gravity="center"
+                    android:drawableLeft="@mipmap/yuan" android:layout_margin="@dimen/dp_5"
+                    android:text="48小时快速退款"/>
                 <TextView
                     android:layout_weight="1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/sp_12"
-                    android:layout_margin="@dimen/dp_5"
-                    android:text="○满88元免邮费"/>
+                    android:gravity="center"
+                    android:drawableLeft="@mipmap/yuan" android:layout_margin="@dimen/dp_5"
+                    android:text="满88元免邮费"/>
             </LinearLayout>
             <!--商品信息-->
             <LinearLayout
@@ -73,6 +77,10 @@
                     android:layout_marginTop="@dimen/dp_20"
                     android:layout_height="wrap_content"/>
             </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_2"
+                android:background="#CDCBCB" />
             <!--数量选择区域-->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"

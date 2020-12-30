@@ -9,12 +9,15 @@ import com.example.shopping_android_app.model.home.CategoryListBean;
 import com.example.shopping_android_app.model.home.HomeBean;
 import com.example.shopping_android_app.model.home.HotBase;
 import com.example.shopping_android_app.model.home.HotGoodListBean;
+import com.example.shopping_android_app.model.home.address.AddressBase;
+import com.example.shopping_android_app.model.home.address.AddressListBase;
 import com.example.shopping_android_app.model.home.catalog.CatalogBase;
 import com.example.shopping_android_app.model.home.catalog.CatalogListBase;
 import com.example.shopping_android_app.model.home.details.DetailsBase;
 import com.example.shopping_android_app.model.home.details.RelatedBase;
 import com.example.shopping_android_app.model.home.login.LoginBean;
 import com.example.shopping_android_app.model.home.login.RegisterBean;
+import com.example.shopping_android_app.model.home.me.UserInfoBean;
 import com.example.shopping_android_app.model.home.shop.AddCarBean;
 import com.example.shopping_android_app.model.home.shop.CarBean;
 import com.example.shopping_android_app.model.home.shop.DeleteCarBean;
@@ -135,5 +138,31 @@ public interface ShopApi {
     @FormUrlEncoded
     Flowable<DeleteCarBean> deleteCar(@Field("productIds") String productIds);
 
+    //收货地址列表
+    //https://cdplay.cn/api/address/list
+    @GET("api/address/list")
+    Flowable<AddressListBase> getAddressList();
+
+    //收货地址列表
+    //https://cdplay.cn/api/address/detail?id=4
+    @GET("api/address/detail?")
+    Flowable<AddressBase> getAddress(@Query("id") int id);
+
+    //添加地址
+    //https://cdplay.cn/api/address/save
+    @POST("api/address/save")
+    @FormUrlEncoded
+    Flowable<AddressListBase> addAddress(@FieldMap Map<String,String> map);
+
+    //删除地址
+    //https://cdplay.cn/api/address/delete
+    @POST("api/address/delete")
+    @FormUrlEncoded
+    Flowable<AddressListBase> deleteAddress(@Field("id") int id);
+
+    //用户信息更新
+    @POST("api/user/updateUserInfo")
+    @FormUrlEncoded
+    Flowable<UserInfoBean> updateUserInfo(@FieldMap Map<String,String> map);
 
 }

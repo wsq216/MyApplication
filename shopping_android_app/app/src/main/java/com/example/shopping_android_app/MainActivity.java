@@ -13,6 +13,9 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
+
 public class MainActivity extends AppCompatActivity {
 
     private BottomNavigationView navView;
@@ -58,6 +61,22 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+
+
+
+    }
+
+    public static RealmConfiguration configuration1;
+
+    public static Realm getRealm(){
+        //创建数据库
+        RealmConfiguration configuration = com.example.shopping_android_app.dao.Realm.getRealm();
+        if (configuration1==null){
+            configuration1=configuration;
+        }
+        io.realm.Realm realm = io.realm.Realm.getInstance(configuration1);
+        return realm;
     }
 
 }

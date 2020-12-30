@@ -20,7 +20,9 @@ public class HotGoodModel extends BaseModel implements IHotGood.Model {
                 .subscribeWith(new CommonSubscriber<HotGoodListBean>(callback) {
                     @Override
                     public void onNext(HotGoodListBean hotGoodListBean) {
-                        callback.success(hotGoodListBean);
+                        if (hotGoodListBean!=null) {
+                            callback.success(hotGoodListBean);
+                        }
                     }
                 }));
     }
@@ -33,7 +35,9 @@ public class HotGoodModel extends BaseModel implements IHotGood.Model {
                 .subscribeWith(new CommonSubscriber<HotBase>(callback) {
                     @Override
                     public void onNext(HotBase hotBase) {
-                        callback.success(hotBase);
+                        if (hotBase!=null) {
+                            callback.success(hotBase);
+                        }
                     }
                 }));
     }

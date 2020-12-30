@@ -2,6 +2,7 @@ package com.example.shopping_android_app.ui.dashboard;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -80,9 +81,13 @@ public class BrandActivity extends BaseActivity<IBrand.Presenter> implements IBr
 
     @Override
     public void getBrand(BrandBase brandBase) {
-        List<BrandBase.DataBeanX.DataBean> data = brandBase.getData().getData();
-        list.addAll(data);
-        brandAdapter.notifyDataSetChanged();
+        if (brandBase!=null) {
+            List<BrandBase.DataBeanX.DataBean> data = brandBase.getData().getData();
+            list.addAll(data);
+            brandAdapter.notifyDataSetChanged();
+        }else {
+            Toast.makeText(this, "数据为空", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

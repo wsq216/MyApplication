@@ -85,10 +85,14 @@ public class BreadItemActivity extends BaseActivity<IBrand.Presenter> implements
 
     @Override
     public void getBrandDetail(BrandDatailBase brandDatailBase) {
-        BrandDatailBase.DataBean.BrandBean brand = brandDatailBase.getData().getBrand();
-        Glide.with(this).load(brand.getApp_list_pic_url()).into(imgAppListPicUrl);
-        txtName.setText(brand.getName());
-        txtSimpleDesc.setText(brand.getSimple_desc());
+        if (brandDatailBase!=null) {
+            BrandDatailBase.DataBean.BrandBean brand = brandDatailBase.getData().getBrand();
+            Glide.with(this).load(brand.getApp_list_pic_url()).into(imgAppListPicUrl);
+            txtName.setText(brand.getName());
+            txtSimpleDesc.setText(brand.getSimple_desc());
+        }else {
+            Toast.makeText(this, "数据为空！", Toast.LENGTH_SHORT).show();
+        }
     }
 
 }

@@ -27,12 +27,14 @@ import com.example.shopping_android_app.adapter.TopicListAdapter;
 import com.example.shopping_android_app.base.BaseAdapter;
 import com.example.shopping_android_app.base.BaseFragment;
 import com.example.shopping_android_app.interfaces.home.IHome;
+import com.example.shopping_android_app.model.home.BrandBase;
 import com.example.shopping_android_app.model.home.CategoryBean;
 import com.example.shopping_android_app.model.home.CategoryListBean;
 import com.example.shopping_android_app.model.home.HomeBean;
 import com.example.shopping_android_app.presenter.home.HomePresenter;
 import com.example.shopping_android_app.ui.channel.CategoryActivity;
 import com.example.shopping_android_app.ui.dashboard.BrandActivity;
+import com.example.shopping_android_app.ui.dashboard.BreadItemActivity;
 import com.example.shopping_android_app.ui.dashboard.DashboardFragment;
 import com.example.shopping_android_app.ui.details.CarActivity;
 import com.youth.banner.Banner;
@@ -90,7 +92,10 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements IHome.V
                 startActivity(intent);
             }
         });
+
+
     }
+
 
     @Override
     protected int getLayout() {
@@ -111,12 +116,19 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements IHome.V
     public void getHomeReturn(HomeBean result) {
         if (result != null) {
             HomeBean.DataBean data = result.getData();
+            //banner图
             initBanner(data.getBanner());
+            //商品类型
             initChannel(data.getChannel());
+            //品牌制造商
             initBrand(data.getBrandList());
+            //新品首发
             initNewGoodsList(data.getNewGoodsList());
+            //人气推荐
             initHotGoodsList(data.getHotGoodsList());
+            //专题
             initTopicList(data.getTopicList());
+            //居家
             initCategoryList(data.getCategoryList());
         }
     }
@@ -202,6 +214,16 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements IHome.V
 
         recyPop.setAdapter(hotGoodsAdapter);
 
+        hotGoodsAdapter.addListClick(new BaseAdapter.IListClick() {
+            @Override
+            public void itemClick(int pos) {
+                HomeBean.DataBean.HotGoodsListBean goodsListBean = hotGoodsList.get(pos);
+                Intent intent = new Intent(getActivity(), CarActivity.class);
+                intent.putExtra("id", goodsListBean.getId());
+                startActivity(intent);
+            }
+        });
+
     }
 
     private void initBrand(List<HomeBean.DataBean.BrandListBean> brandList) {
@@ -210,6 +232,16 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements IHome.V
         BrandListAdapter brandListAdapter = new BrandListAdapter(getActivity(), brandList);
 
         recyBrand.setAdapter(brandListAdapter);
+
+        brandListAdapter.addListClick(new BaseAdapter.IListClick() {
+            @Override
+            public void itemClick(int pos) {
+                HomeBean.DataBean.BrandListBean brandListBean = brandList.get(pos);
+                Intent intent = new Intent(getActivity(), BreadItemActivity.class);
+                intent.putExtra("id",brandListBean.getId());
+                startActivity(intent);
+            }
+        });
     }
 
     private void initNewGoodsList(List<HomeBean.DataBean.NewGoodsListBean> newGoodsList) {
@@ -219,6 +251,17 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements IHome.V
         NewGoodsListAdapter newGoodsListAdapter = new NewGoodsListAdapter(getActivity(), newGoodsList);
 
         recyNewgood.setAdapter(newGoodsListAdapter);
+
+        newGoodsListAdapter.addListClick(new BaseAdapter.IListClick() {
+            @Override
+            public void itemClick(int pos) {
+                HomeBean.DataBean.NewGoodsListBean goodsListBean = newGoodsList.get(pos);
+                Intent intent = new Intent(getActivity(), CarActivity.class);
+                intent.putExtra("id", goodsListBean.getId());
+                startActivity(intent);
+            }
+        });
+
     }
 
     private void initBanner(List<HomeBean.DataBean.BannerBean> list) {
@@ -236,9 +279,11 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements IHome.V
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.txt_brand_title:
+                //品牌页面
                 startActivity(new Intent(getActivity(), BrandActivity.class));
                 break;
             case R.id.txt_newgood_title:
+                //新品首发页面
                 startActivity(new Intent(getActivity(), HotGoodActivity.class));
                 break;
         }

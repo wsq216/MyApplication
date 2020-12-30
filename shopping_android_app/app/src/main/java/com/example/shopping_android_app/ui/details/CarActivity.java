@@ -31,7 +31,9 @@ import com.example.shopping_android_app.adapter.CarImgAdapter;
 import com.example.shopping_android_app.adapter.DetailsAdapter;
 import com.example.shopping_android_app.base.BaseActivity;
 import com.example.shopping_android_app.base.BaseAdapter;
+import com.example.shopping_android_app.dao.DbUtils;
 import com.example.shopping_android_app.interfaces.home.IDetail;
+import com.example.shopping_android_app.model.home.CategoryListBean;
 import com.example.shopping_android_app.model.home.details.DetailsBase;
 import com.example.shopping_android_app.model.home.details.RelatedBase;
 import com.example.shopping_android_app.model.home.shop.AddCarBean;
@@ -55,6 +57,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+import io.realm.RealmResults;
 
 public class CarActivity extends BaseActivity<IDetail.Presenter> implements IDetail.View {
 
@@ -131,6 +134,9 @@ public class CarActivity extends BaseActivity<IDetail.Presenter> implements IDet
     private TextView num;
     int i = 1;
     private DetailsBase detailsBase1;
+    private DetailsBase.DataBeanX.InfoBean info;
+    private Realm realm;
+
 
     @Override
     protected int getLayout() {
@@ -149,18 +155,17 @@ public class CarActivity extends BaseActivity<IDetail.Presenter> implements IDet
 //                .schemaVersion(0) //版本号
 //                .build();
 //        Realm realm = Realm.getInstance(config);
-        Realm.init(this);
-        RealmConfiguration configuration = new RealmConfiguration.Builder()
-                .name("test.realm")
-                .schemaVersion(0)
-                //.deleteRealmIfMigrationNeeded()
-                .build();
+//        Realm.init(this);
+//        RealmConfiguration configuration = new RealmConfiguration.Builder()
+//                .name("test.realm")
+//                .schemaVersion(0)
+//                //.deleteRealmIfMigrationNeeded()
+//                .build();
+//
+//        Realm realm = Realm.getInstance(configuration);
+//        String str = realm.getPath();
+//        Log.i(TAG, str);
 
-        Realm realm = Realm.getInstance(configuration);
-        String str = realm.getPath();
-        Log.i(TAG, str);
-
-        imgCollect.setTag(0);
         imgCollect.setOnClickListener(this::onClick);
         layoutCar.setOnClickListener(this::onClick);
     }
@@ -178,6 +183,21 @@ public class CarActivity extends BaseActivity<IDetail.Presenter> implements IDet
             }
         }
 
+        realm = MainActivity.getRealm();
+
+        RealmResults<DbUtils> user = realm.where(DbUtils.class).findAll();
+        List<DbUtils> list = new ArrayList<>();
+        list.addAll(user);
+        imgCollect.setTag(0);
+        if (info != null) {
+            for (int j = 0; j < list.size(); j++) {
+                if (list.get(j).getName().equals(info.getName())) {
+                    imgCollect.setImageResource(R.mipmap.ic_collect_select);
+                    imgCollect.setTag(1);
+                    break;
+                }
+            }
+        }
 
     }
 
@@ -240,7 +260,6 @@ public class CarActivity extends BaseActivity<IDetail.Presenter> implements IDet
         CarImgAdapter carImgAdapter = new CarImgAdapter(this, listUrl);
         rvImg.setAdapter(carImgAdapter);
 
-        Toast.makeText(this, listUrl.get(0), Toast.LENGTH_SHORT).show();
 
         carImgAdapter.addListClick(new BaseAdapter.IListClick() {
             @Override
@@ -270,7 +289,7 @@ public class CarActivity extends BaseActivity<IDetail.Presenter> implements IDet
                 Log.d(TAG, "gallery: null");
             }
             //商品  大家都再看
-            DetailsBase.DataBeanX.InfoBean info = detailsBase.getData().getInfo();
+            info = detailsBase.getData().getInfo();
             if (info != null) {
                 initText(info);
             } else {
@@ -287,24 +306,24 @@ public class CarActivity extends BaseActivity<IDetail.Presenter> implements IDet
             }
             //常见问题
             List<DetailsBase.DataBeanX.IssueBean> issue = detailsBase.getData().getIssue();
-            if (issue != null) {
+            if (issue.size() > 0) {
                 initCommonProblem(issue);
             } else {
                 Log.d(TAG, "issue: null");
             }
             //商品规格
             List<DetailsBase.DataBeanX.AttributeBean> attribute = detailsBase.getData().getAttribute();
-            if (attribute != null) {
+            if (attribute.size() > 0) {
                 initAttribute(attribute);
             } else {
                 Log.d(TAG, "attribute: null");
             }
-
-            //选择商品数量
-            String galleryBean = gallery.get(0).getImg_url();
-            int retail_price = info.getRetail_price();
-            initDetail(galleryBean, retail_price);
-
+            if (gallery.size() > 0) {
+                //选择商品数量
+                String galleryBean = gallery.get(0).getImg_url();
+                int retail_price = info.getRetail_price();
+                initDetail(galleryBean, retail_price);
+            }
             //评论
             DetailsBase.DataBeanX.CommentBean comment = detailsBase.getData().getComment();
             if (comment != null) {
@@ -313,7 +332,7 @@ public class CarActivity extends BaseActivity<IDetail.Presenter> implements IDet
                 Log.d(TAG, "comment: null");
             }
         } else {
-            Log.e(TAG, "getDetails: null");
+            Toast.makeText(this, "请求数据为空", Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -324,12 +343,16 @@ public class CarActivity extends BaseActivity<IDetail.Presenter> implements IDet
         txtCommentTime.setText(comment.getData().getAdd_time());
         txtCommentText.setText(comment.getData().getContent());
         List<DetailsBase.DataBeanX.CommentBean.DataBean.PicListBean> pic_list = comment.getData().getPic_list();
-        for (int i = 0; i < pic_list.size(); i++) {
-            View inflate = LayoutInflater.from(this).inflate(R.layout.details_item_comment_img, null);
-            ImageView img = inflate.findViewById(R.id.img_comment);
-            Glide.with(this).load(pic_list.get(i).getPic_url()).into(img);
-            inflate.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f));
-            linearCommentImg.addView(inflate);
+        if (pic_list != null) {
+            for (int i = 0; i < pic_list.size(); i++) {
+                View inflate = LayoutInflater.from(this).inflate(R.layout.details_item_comment_img, null);
+                ImageView img = inflate.findViewById(R.id.img_comment);
+                Glide.with(this).load(pic_list.get(i).getPic_url()).into(img);
+                inflate.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f));
+                linearCommentImg.addView(inflate);
+            }
+        } else {
+            Toast.makeText(this, "评价无图片数据", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -342,7 +365,7 @@ public class CarActivity extends BaseActivity<IDetail.Presenter> implements IDet
         TextView no = inflate.findViewById(R.id.txt_no);
         TextView price = inflate.findViewById(R.id.txt_price);
         TextView brief = inflate.findViewById(R.id.txt_brief);
-        popupWindow = new PopupWindow(inflate, ViewGroup.LayoutParams.MATCH_PARENT, 500);
+        popupWindow = new PopupWindow(inflate, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         popupWindow.setAttachedInDecor(true);
 
         detailsNum.setOnClickListener(new View.OnClickListener() {
@@ -371,9 +394,28 @@ public class CarActivity extends BaseActivity<IDetail.Presenter> implements IDet
                     if (tag1 == 0) {
                         imgCollect.setImageResource(R.mipmap.ic_collect_select);
                         imgCollect.setTag(1);
+                        realm.executeTransaction(new io.realm.Realm.Transaction() {
+                            @Override
+                            public void execute(io.realm.Realm realm) {
+                                DbUtils user = realm.createObject(DbUtils.class);
+                                user.setName(info.getName());
+                                user.setPrice(info.getRetail_price() + "");
+                                user.setUrl(info.getList_pic_url());
+                            }
+                        });
+
+                        Toast.makeText(this, "添加成功", Toast.LENGTH_SHORT).show();
                     } else {
                         imgCollect.setImageResource(R.mipmap.ic_collect_normal);
                         imgCollect.setTag(0);
+                        RealmResults<DbUtils> user = realm.where(DbUtils.class).findAll();
+                        realm.executeTransaction(new io.realm.Realm.Transaction() {
+                            @Override
+                            public void execute(io.realm.Realm realm) {
+                                user.get(user.size() - 1).deleteFromRealm();
+                            }
+                        });
+                        Toast.makeText(this, "删除成功", Toast.LENGTH_SHORT).show();
                     }
                     break;
                 case R.id.jian:
@@ -444,17 +486,17 @@ public class CarActivity extends BaseActivity<IDetail.Presenter> implements IDet
      * 添加进购物车
      */
     private void addCar() {
-        if (i<0){
+        if (i < 0) {
             Toast.makeText(this, "数量不够", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (detailsBase1.getData().getProductList().size()>0){
+        if (detailsBase1.getData().getProductList().size() > 0) {
             int goodsId = this.detailsBase1.getData().getProductList().get(0).getGoods_id();
             int productid = this.detailsBase1.getData().getProductList().get(0).getId();
-            Map<String,String> map = new HashMap<>();
-            map.put("goodsId",String.valueOf(goodsId));
-            map.put("number",String.valueOf(i));
-            map.put("productId",String.valueOf(productid));
+            Map<String, String> map = new HashMap<>();
+            map.put("goodsId", String.valueOf(goodsId));
+            map.put("number", String.valueOf(i));
+            map.put("productId", String.valueOf(productid));
             presenter.addGoodCar(map);
         }
     }
@@ -462,10 +504,10 @@ public class CarActivity extends BaseActivity<IDetail.Presenter> implements IDet
     /**
      * 打开购物车
      */
-    private void openGoodCar(){
+    private void openGoodCar() {
         Intent intent = new Intent();
         intent.setClass(CarActivity.this, MainActivity.class);
-        intent.putExtra("id",3);//其中1表示Fragment的编号，从0开始编，secondFra的编号为1
+        intent.putExtra("id", 3);//其中1表示Fragment的编号，从0开始编，secondFra的编号为1
         startActivity(intent);
     }
 
@@ -512,14 +554,26 @@ public class CarActivity extends BaseActivity<IDetail.Presenter> implements IDet
 
     @Override
     public void getRelated(RelatedBase brandIdBase) {
-        rvList.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+        if (brandIdBase != null) {
+            rvList.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
 
-        rvList.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        rvList.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.HORIZONTAL));
+            rvList.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+            rvList.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.HORIZONTAL));
 
-        DetailsAdapter detailsAdapter = new DetailsAdapter(this, brandIdBase.getData().getGoodsList());
+            DetailsAdapter detailsAdapter = new DetailsAdapter(this, brandIdBase.getData().getGoodsList());
 
-        rvList.setAdapter(detailsAdapter);
+            rvList.setAdapter(detailsAdapter);
+
+            detailsAdapter.addListClick(new BaseAdapter.IListClick() {
+                @Override
+                public void itemClick(int pos) {
+                    RelatedBase.DataBean.GoodsListBean goodsListBean = brandIdBase.getData().getGoodsList().get(pos);
+                    Intent intent = new Intent(CarActivity.this, CarActivity.class);
+                    intent.putExtra("id", goodsListBean.getId());
+                    startActivity(intent);
+                }
+            });
+        }
     }
 
     @Override
