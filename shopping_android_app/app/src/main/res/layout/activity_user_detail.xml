@@ -49,6 +49,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_username"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_80">
         <TextView
@@ -127,10 +128,29 @@
             android:layout_marginLeft="@dimen/dp_10"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
     <Button
         android:id="@+id/btn_loginout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="退出登录"
         />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_input"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_50"
+        app:layout_constraintBottom_toBottomOf="parent">
+        <EditText
+            android:id="@+id/txt_input"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/btn_save"></EditText>
+        <Button
+            android:id="@+id/btn_save"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:text="保存"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

@@ -6,15 +6,16 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.alibaba.sdk.android.oss.ClientConfiguration;
@@ -34,17 +35,14 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.shopping_android_app.R;
 import com.example.shopping_android_app.app.Constants;
 import com.example.shopping_android_app.base.BaseActivity;
-import com.example.shopping_android_app.interfaces.login.ILogin;
 import com.example.shopping_android_app.interfaces.me.IUser;
-import com.example.shopping_android_app.model.home.login.LoginBean;
 import com.example.shopping_android_app.model.home.login.LogoutBase;
-import com.example.shopping_android_app.model.home.login.RegisterBean;
 import com.example.shopping_android_app.model.home.me.UserInfoBean;
 import com.example.shopping_android_app.presenter.home.UserPresenter;
-import com.example.shopping_android_app.presenter.home.login.LoginPresenter;
 import com.example.shopping_android_app.utils.BitmapUtils;
 import com.example.shopping_android_app.utils.GlideEngine;
 import com.example.shopping_android_app.utils.SpUtils;
+import com.example.shopping_android_app.utils.SystemUtils;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
@@ -56,9 +54,8 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
-public class UserDetailActivity extends BaseActivity<IUser.Presenter> implements IUser.View{
+public class UserDetailActivity extends BaseActivity<IUser.Presenter> implements IUser.View {
 
     @BindView(R.id.iv_return)
     ImageView ivReturn;
@@ -80,6 +77,14 @@ public class UserDetailActivity extends BaseActivity<IUser.Presenter> implements
     ConstraintLayout layoutNickname;
     @BindView(R.id.btn_loginout)
     Button btnLoginout;
+    @BindView(R.id.txt_input)
+    EditText txtInput;
+    @BindView(R.id.btn_save)
+    Button btnSave;
+    @BindView(R.id.layout_input)
+    ConstraintLayout layoutInput;
+    @BindView(R.id.layout_username)
+    ConstraintLayout layoutUsername;
 
     private OSS ossClient;
     String bucketName = "2002a";
@@ -87,11 +92,12 @@ public class UserDetailActivity extends BaseActivity<IUser.Presenter> implements
 
     String key = "LTAI4GH6Gy8tFbbXJ3vatsAn";  //appkey
     String secret = "YjWyqsTnHX8336jRZ1vg7FSWaojPf8";  //密码
+    private String nickname;
 
     @Override
     protected void onStart() {
         super.onStart();
-        String username = SpUtils.getInstance().getString("username");
+        String username = SpUtils.getInstance().getString("url");
         if (username != null) {
             Glide.with(this).load(username).apply(new RequestOptions().circleCrop()).into(imgAvatar);
         }
@@ -112,7 +118,12 @@ public class UserDetailActivity extends BaseActivity<IUser.Presenter> implements
     @Override
     protected void initView() {
         initOss();
-
+        String nickname = SpUtils.getInstance().getString("nickname");
+        String username = SpUtils.getInstance().getString("username");
+        if (!TextUtils.isEmpty(nickname)&&!TextUtils.isEmpty(username)){
+            txtNickname.setText(nickname);
+            txtUsername.setText(username);
+        }
     }
 
     @Override
@@ -127,10 +138,40 @@ public class UserDetailActivity extends BaseActivity<IUser.Presenter> implements
         btnLoginout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (SpUtils.getInstance().getString("token")!=null){
+                String token = SpUtils.getInstance().getString("token");
+                if (!TextUtils.isEmpty(token)) {
                     presenter.logout();
-                }else{
+                } else {
                     Toast.makeText(UserDetailActivity.this, "请先登录", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        layoutNickname.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //打开输入的状态
+                showInput();
+            }
+        });
+
+    }
+
+    private void showInput() {
+        layoutInput.setVisibility(View.VISIBLE);
+        txtInput.setFocusable(true);
+        SystemUtils.openSoftKeyBoard(this);
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                nickname = txtInput.getText().toString();
+
+                if (!TextUtils.isEmpty(nickname)){
+                    Map<String, String> map = new HashMap<>();
+                    map.put("nickname", nickname);
+                    presenter.updateUserInfo(map);
+                }else{
+                    Toast.makeText(UserDetailActivity.this, "nickname为空", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -192,12 +233,15 @@ public class UserDetailActivity extends BaseActivity<IUser.Presenter> implements
                 //成功的回调中读取相关的上传文件的信息  生成一个url地址
                 String url = ossClient.presignPublicObjectURL(request.getBucketName(), request.getObjectKey());
                 //调用服务器接口 把url上传到服务器的接口
-                SpUtils.getInstance().setValue("username", url);
+                SpUtils.getInstance().setValue("url", url);
+
+
+                Map<String, String> map = new HashMap<>();
+                map.put("avatar", url);
+                presenter.updateUserInfo(map);
 
                 updateHead(url);
-                Map<String,String> map = new HashMap<>();
-                map.put("avatar",url);
-                presenter.updateUserInfo(map);
+
             }
 
             @Override
@@ -275,12 +319,27 @@ public class UserDetailActivity extends BaseActivity<IUser.Presenter> implements
     public void updateUserInfoReturn(UserInfoBean result) {
         if (result.getErrno() == 0) {
             Toast.makeText(this, "修改成功", Toast.LENGTH_SHORT).show();
+            if (!TextUtils.isEmpty(nickname)){
+                SystemUtils.closeSoftKeyBoard(this);
+                layoutInput.setVisibility(View.GONE);
+                txtNickname.setText(nickname);
+                SpUtils.getInstance().setValue("nickname",nickname);
+            }
+         } else {
+            Toast.makeText(this, result.getErrmsg(), Toast.LENGTH_SHORT).show();
+
         }
     }
 
     @Override
     public void logout(LogoutBase logoutBase) {
-
+        if (logoutBase.getErrno() == 0) {
+            Toast.makeText(this, logoutBase.getData(), Toast.LENGTH_SHORT).show();
+            SpUtils.getInstance().delete();
+            finish();
+        } else {
+            Toast.makeText(this, "退出失败", Toast.LENGTH_SHORT).show();
+        }
     }
 
 
@@ -293,4 +352,5 @@ public class UserDetailActivity extends BaseActivity<IUser.Presenter> implements
     public void showToast(String tips) {
 
     }
+
 }

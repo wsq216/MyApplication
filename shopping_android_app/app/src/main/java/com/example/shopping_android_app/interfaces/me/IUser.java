@@ -24,6 +24,6 @@ public interface IUser {
 
     interface Model extends IBaseModel {
         void updateUserInfo(Map<String, String> map, Callback callback);
-        void logout( Callback callback);
+        void logout(Callback callback);
     }
 }

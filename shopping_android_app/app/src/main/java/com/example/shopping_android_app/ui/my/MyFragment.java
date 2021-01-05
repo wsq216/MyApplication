@@ -2,9 +2,9 @@ package com.example.shopping_android_app.ui.my;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,6 +21,7 @@ import com.example.shopping_android_app.base.BasePresenter;
 import com.example.shopping_android_app.dao.DbActivity;
 import com.example.shopping_android_app.ui.login.LoginActivity;
 import com.example.shopping_android_app.utils.SpUtils;
+import com.live.RoomActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +63,9 @@ public class MyFragment extends BaseFragment {
                 R.mipmap.anquan,
                 R.mipmap.denglu,
                 R.mipmap.bangzhu,
-                R.mipmap.yijian
+                R.mipmap.yijian,
+                R.mipmap.zhido
+
         };
         String[] title = new String[]{
                 "我的订单",
@@ -75,7 +78,8 @@ public class MyFragment extends BaseFragment {
                 "账号安全",
                 "联系客服",
                 "帮助中心",
-                "意见反馈"
+                "意见反馈",
+                "直播"
         };
         List<MyBean> list = new ArrayList<MyBean>();
         for (int i = 0; i < title.length; i++) {
@@ -91,6 +95,9 @@ public class MyFragment extends BaseFragment {
                 switch (position) {
                     case 3:
                         startActivity(new Intent(getActivity(), DbActivity.class));
+                        break;
+                    case 11:
+                        startActivity(new Intent(getActivity(), RoomActivity.class));
                         break;
                 }
             }
@@ -151,9 +158,18 @@ public class MyFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        String username = SpUtils.getInstance().getString("username");
-        if (username!=null){
+        String username = SpUtils.getInstance().getString("url");
+        String name = SpUtils.getInstance().getString("username");
+        if (!TextUtils.isEmpty(username)){
             Glide.with(getActivity()).load(username).apply(new RequestOptions().circleCrop()).into(loginHead);
+        }else{
+            Glide.with(getActivity()).load(R.mipmap.denglu).apply(new RequestOptions().circleCrop()).into(loginHead);
+        }
+        if (!TextUtils.isEmpty(name)){
+            loginName.setText(name);
+        }else{
+            loginName.setText("请登录");
+
         }
     }
 }

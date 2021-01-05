@@ -11,6 +11,7 @@ import com.example.shopping_android_app.model.home.HotBase;
 import com.example.shopping_android_app.model.home.HotGoodListBean;
 import com.example.shopping_android_app.model.home.address.AddressBase;
 import com.example.shopping_android_app.model.home.address.AddressListBase;
+import com.example.shopping_android_app.model.home.app.AppBean;
 import com.example.shopping_android_app.model.home.catalog.CatalogBase;
 import com.example.shopping_android_app.model.home.catalog.CatalogListBase;
 import com.example.shopping_android_app.model.home.details.DetailsBase;
@@ -119,6 +120,7 @@ public interface ShopApi {
     //退出登录
     //https://cdplay.cn/api/auth/logout
     @POST("api/auth/logout")
+
     Flowable<LogoutBase> logout();
 
 
@@ -169,6 +171,8 @@ public interface ShopApi {
     @FormUrlEncoded
     Flowable<UserInfoBean> updateUserInfo(@FieldMap Map<String,String> map);
 
-
+    //版本更新
+    @GET("api/apk/appinfo")
+    Flowable<AppBean> getAppInfo();
 
 }

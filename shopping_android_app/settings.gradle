@@ -1,3 +1,5 @@
+include ':mvp'
+include ':mylibrary'
 include ':library'
 include ':app'
 rootProject.name = "shopping_android_app"

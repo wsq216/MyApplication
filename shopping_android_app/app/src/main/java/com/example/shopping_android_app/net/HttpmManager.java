@@ -39,7 +39,7 @@ public class HttpmManager {
                 .baseUrl(url)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-//                .client(getOk())
+                .client(getOk())
                 .build();
 
     }
