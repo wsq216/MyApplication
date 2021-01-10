@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+            name="vmNewGoodsList"
+            type="com.example.myapplication.data.newgoods.DataX" />
+    </data>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:id="@+id/liner"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_250">
+
+        <ImageView
+            android:layout_width="@dimen/dp_150"
+            android:layout_height="@dimen/dp_150"
+            android:src="@mipmap/ic_menu_me_nor"
+            android:id="@+id/new_pic_url"></ImageView>
+
+        <TextView
+            android:layout_width="@dimen/dp_150"
+            android:layout_height="wrap_content"
+            android:text="@{vmNewGoodsList.name}"
+            android:singleLine="true"
+            android:maxEms="10"
+            android:layout_margin="@dimen/dp_8"
+            android:textSize="@dimen/sp_12"
+            android:gravity="center"
+            android:id="@+id/name" />
+
+        <TextView
+            android:layout_width="@dimen/dp_150"
+            android:layout_height="wrap_content"
+            android:text="@{vmNewGoodsList.retail_price}"
+            android:gravity="center"
+            android:textColor="#E60F0F"
+            android:textSize="@dimen/sp_10"
+            android:id="@+id/floor_price" />
+
+
+    </LinearLayout>
+</layout>

@@ -71,9 +71,9 @@ public class RoomModel extends BaseModel implements IRoom.Model {
     }
 
     @Override
-    public void roomLiveUrl(int roomid, Callback callback) {
+    public void roomLiveUrl(HashMap<String,String> map, Callback callback) {
         addDisposible( HttpmManager.getHttpmManager().getShopApi()
-                .roomLiveUrl(roomid)
+                .roomLiveUrl(map)
                 .compose( RxUtils.rxScheduler() )
                 .subscribeWith( new CommonSubscriber<RoomLiveUrlBean>( callback ) {
                     @Override

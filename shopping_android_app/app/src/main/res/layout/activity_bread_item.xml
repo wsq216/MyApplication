@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.dashboard.BreadItemActivity">
+    tools:context="com.example.shopping_android_app.ui.dashboard.BreadItemActivity">
 
 
     <androidx.core.widget.NestedScrollView

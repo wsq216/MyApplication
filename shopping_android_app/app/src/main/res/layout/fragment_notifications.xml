@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.notifications.NotificationsFragment">
+    tools:context="com.example.shopping_android_app.ui.notifications.NotificationsFragment">
 
     <Button
         android:id="@+id/action_up_btn"

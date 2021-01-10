@@ -5,7 +5,7 @@
     android:layout_margin="@dimen/dp_15"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.notifications.CatalogFragment">
+    tools:context="com.example.shopping_android_app.ui.notifications.CatalogFragment">
 
    <androidx.core.widget.NestedScrollView
        android:layout_width="match_parent"

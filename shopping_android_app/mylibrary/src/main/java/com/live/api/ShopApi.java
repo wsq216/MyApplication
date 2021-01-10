@@ -44,7 +44,7 @@ public interface ShopApi {
     //房间播放地址获取
     @POST("api/live/roomLiveUrl")
     @FormUrlEncoded
-    Flowable<RoomLiveUrlBean> roomLiveUrl(@Field("roomid") int roomid );
+    Flowable<RoomLiveUrlBean> roomLiveUrl(@FieldMap Map<String,String> map );
 
     //房间播放地址获取
     //https://cdplay.cn/api/live/editorRoom

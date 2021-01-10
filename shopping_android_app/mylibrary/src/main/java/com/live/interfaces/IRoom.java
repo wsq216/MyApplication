@@ -32,7 +32,7 @@ public interface IRoom {
         void startLive(HashMap<String, String> map);
         void getRoomList();
         void myroom();
-        void roomLiveUrl(int roomid);
+        void roomLiveUrl(HashMap<String, String> map);
         void editorRoom(HashMap<String, String> map);
 
     }
@@ -43,7 +43,7 @@ public interface IRoom {
         void startLive(HashMap<String, String> map, Callback callback);
         void getRoomList( Callback callback);
         void myroom( Callback callback);
-        void roomLiveUrl(int roomid, Callback callback);
+        void roomLiveUrl(HashMap<String, String> map, Callback callback);
         void editorRoom(HashMap<String, String> map, Callback callback);
 
     }

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.channel.CategoryActivity">
+    tools:context="com.example.shopping_android_app.ui.channel.CategoryActivity">
 
     <include
         layout="@layout/toolbar_layout"

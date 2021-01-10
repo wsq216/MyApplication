@@ -97,9 +97,9 @@ public class RoomPresenter extends BasePresenter<IRoom.View> implements IRoom.Pr
     }
 
     @Override
-    public void roomLiveUrl(int roomid) {
+    public void roomLiveUrl(HashMap<String,String> map) {
         if(view!=null){
-            this.model.roomLiveUrl( roomid,new Callback<RoomLiveUrlBean>() {
+            this.model.roomLiveUrl( map,new Callback<RoomLiveUrlBean>() {
                 @Override
                 public void success(RoomLiveUrlBean data) {
                     view.roomLiveUrl( data );

@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_height="match_parent"
-    tools:context=".ui.my.MyFragment">
+    tools:context="com.example.shopping_android_app.ui.my.MyFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_userinfo"

@@ -5,14 +5,16 @@ android {
     buildToolsVersion "30.0.2"
 
     defaultConfig {
-        applicationId "com.example.shopping_android_app"
+        applicationId "com.client"
         minSdkVersion 22
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
 
         multiDexEnabled true
-
+        ndk{
+            moduleName "MyJni-jni"
+        }
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -20,6 +22,12 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+
+        sourceSets {
+            main{
+                jniLibs.srcDirs = ['libs']
+            }
         }
     }
 
