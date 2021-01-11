@@ -123,7 +123,7 @@ class HomeFragment : Fragment(),View.OnClickListener {
     }
 
     private fun initTopic(topicListAdapter: TopicListAdapter) {
-        viewModel!!.topic.observe(this,{
+        viewModel!!.topic.observe(this, Observer{
             topicListAdapter.refreshData(it)
         })
     }
@@ -145,7 +145,7 @@ class HomeFragment : Fragment(),View.OnClickListener {
 
     //新品首发
     private fun showNewGoodsList() {
-        var layout = StaggeredGridLayoutManager(1,StaggeredGridLayoutManager.HORIZONTAL)
+        var layout = StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL)
         mBinging!!.recyNewgood.layoutManager = layout
         var newGoodsAdapter = NewGoodsAdapter(context)
         mBinging!!.recyNewgood.adapter=newGoodsAdapter

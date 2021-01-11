@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.PopupWindow
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.bumptech.glide.Glide
@@ -81,7 +82,7 @@ class NewGoodsActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun showHot() {
-        viewModel!!.hotdata.observe(this, {
+        viewModel!!.hotdata.observe(this, Observer{
             mBinging!!.txtInfo.setText(it.name)
             Glide.with(this).load(it.img_url).into(mBinging!!.imgHotgood)
         })
@@ -108,14 +109,14 @@ class NewGoodsActivity : AppCompatActivity(), View.OnClickListener {
                     priceStateUp();
                     mBinging!!.layoutPrice.setTag(1);
                     viewModel!!.newGoodsListData(ASC, DEFAULT, CATEGORYID)
-                    initViewList(ASC, DEFAULT, CATEGORYID)
+                    initViewList(ASC, PRICE, CATEGORYID)
                     initVm()
                 } else if (tag == 1) {
                     resetPriceState();
                     priceStateDown();
                     mBinging!!.layoutPrice.setTag(0);
                     viewModel!!.newGoodsListData(DESC, DEFAULT, CATEGORYID)
-                    initViewList(DESC, DEFAULT, CATEGORYID)
+                    initViewList(DESC, PRICE, CATEGORYID)
                     initVm()
                 }
                 if (popupWindow != null) {
