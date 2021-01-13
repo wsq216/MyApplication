@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="vmTp1"
+            type="com.example.myapplication.data.hot.Discover" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp_25">
+
+        <TextView
+            android:id="@+id/tv_title_tp1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@{vmTp1.title}"
+            android:textColor="#000"
+            android:textSize="@dimen/dp_16"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@{vmTp1.createTime}"
+            android:textSize="@dimen/sp_12"
+            android:textColor="#aaa"
+            android:layout_marginTop="@dimen/dp_20"
+            app:layout_constraintTop_toBottomOf="@id/tv_title_tp1" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -2,11 +2,11 @@ package com.example.myapplication.net
 
 import android.util.Log
 import com.example.myapplication.app.Constants
+import com.shop.api.ServiceApi
 
 import com.shop.utils.MyMmkv
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
-import okhttp3.Request
 import okhttp3.Response
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -76,7 +76,7 @@ class RetrofitFactory {
     /*
         具体服务实例化
      */
-    fun <T> create(service:Class<T>):T{
+    fun <T> create(service: Class<T>):T{
         return retrofit.create(service)
     }
 }

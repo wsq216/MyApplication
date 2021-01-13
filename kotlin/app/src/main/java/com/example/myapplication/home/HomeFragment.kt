@@ -21,10 +21,12 @@ import com.example.myapplication.R
 import com.example.myapplication.adapter.home.*
 import com.example.myapplication.data.*
 import com.example.myapplication.databinding.FragmentHomeBinding
+import com.example.myapplication.tongpao.HotActivity
 
 
 import com.example.myapplication.viewmodel.BindHomeViewModel
 import com.google.gson.Gson
+import com.shop.base.BaseFragment
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_home.view.*
 import kotlinx.android.synthetic.main.home_item_category.view.*
@@ -40,29 +42,15 @@ import java.net.URL
 import javax.net.ssl.HttpsURLConnection
 
 
-class HomeFragment : Fragment(),View.OnClickListener {
+class HomeFragment : BaseFragment<BindHomeViewModel,FragmentHomeBinding>(R.layout.fragment_home,BindHomeViewModel::class.java),View.OnClickListener {
 
-    var mBinging : FragmentHomeBinding? = null
-    var viewModel: BindHomeViewModel? = null
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-
-        mBinging =  DataBindingUtil.inflate<FragmentHomeBinding>(inflater, R.layout.fragment_home,container,false);
-//        mBinging = inflater.inflate(R.layout.fragment_home, container, false)
-        viewModel = ViewModelProvider(this).get(BindHomeViewModel::class.java)
-        initView()
-        initClick()
-        return mBinging?.root
-    }
     //点击事件
     private fun initClick() {
         //品牌制作商直供  点击事件
-        mBinging!!.txtBrandTitle.setOnClickListener(this)
-        mBinging!!.txtNewgoodTitle.setOnClickListener(this)
+        mDataBinding!!.txtBrandTitle.setOnClickListener(this)
+        mDataBinding!!.txtNewgoodTitle.setOnClickListener(this)
+        mDataBinding!!.txtTitTitle.setOnClickListener(this)
     }
 
     //点击监听
@@ -70,11 +58,13 @@ class HomeFragment : Fragment(),View.OnClickListener {
         when(v?.id){
             R.id.txt_brand_title->startActivity(Intent(context,BrandActivity::class.java))
             R.id.txt_newgood_title->startActivity(Intent(context,NewGoodsActivity::class.java))
+            R.id.txt_tit_title->startActivity(Intent(context,HotActivity::class.java))
+
         }
     }
 
-    private fun initView() {
-        viewModel!!.homeData()
+    override fun initView() {
+        mViewModel!!.getHome()
         //banner图
         showBanner()
         //商品类型
@@ -89,11 +79,12 @@ class HomeFragment : Fragment(),View.OnClickListener {
         showTopicList()
         //居家
         showCategoryList()
+        initClick()
     }
 
     //居家
     private fun showCategoryList() {
-        viewModel!!.category.observe(this, {
+        mViewModel!!.category.observe(this, {
             for (item in it){
                 var view = LayoutInflater.from(context).inflate(R.layout.home_item_category,null)
                 var binging : ViewDataBinding? = DataBindingUtil.bind(view)
@@ -103,7 +94,7 @@ class HomeFragment : Fragment(),View.OnClickListener {
                 view!!.recy_category.adapter=categoryListAdapter
                 initCateGory(item.goodsList,categoryListAdapter)
                 view!!.setTag(item.goodsList)
-                mBinging!!.linesr.addView(view)
+                mDataBinding!!.linesr.addView(view)
             }
         })
     }
@@ -116,14 +107,14 @@ class HomeFragment : Fragment(),View.OnClickListener {
     //专题
     private fun showTopicList() {
         var layout = StaggeredGridLayoutManager(1,StaggeredGridLayoutManager.HORIZONTAL)
-        mBinging!!.recyTopic.layoutManager = layout
+        mDataBinding!!.recyTopic.layoutManager = layout
         var topicListAdapter = TopicListAdapter(context)
-        mBinging!!.recyTopic.adapter=topicListAdapter
+        mDataBinding!!.recyTopic.adapter=topicListAdapter
         initTopic(topicListAdapter)
     }
 
     private fun initTopic(topicListAdapter: TopicListAdapter) {
-        viewModel!!.topic.observe(this, Observer{
+        mViewModel!!.topic.observe(this, Observer{
             topicListAdapter.refreshData(it)
         })
     }
@@ -131,14 +122,14 @@ class HomeFragment : Fragment(),View.OnClickListener {
     //人气推荐
     private fun showHotGoodsList() {
         var layout = StaggeredGridLayoutManager(1,StaggeredGridLayoutManager.VERTICAL)
-        mBinging!!.recyHotgoods.layoutManager = layout
+        mDataBinding!!.recyHotgoods.layoutManager = layout
         var hotGoodsAdapter = HotGoodsAdapter(context)
-        mBinging!!.recyHotgoods.adapter=hotGoodsAdapter
+        mDataBinding!!.recyHotgoods.adapter=hotGoodsAdapter
         initHotGoods(hotGoodsAdapter)
     }
 
     private fun initHotGoods(hotGoodsAdapter: HotGoodsAdapter) {
-        viewModel!!.hot.observe(this,{
+        mViewModel!!.hot.observe(this, Observer{
             hotGoodsAdapter.refreshData(it)
         })
     }
@@ -146,14 +137,14 @@ class HomeFragment : Fragment(),View.OnClickListener {
     //新品首发
     private fun showNewGoodsList() {
         var layout = StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL)
-        mBinging!!.recyNewgood.layoutManager = layout
+        mDataBinding!!.recyNewgood.layoutManager = layout
         var newGoodsAdapter = NewGoodsAdapter(context)
-        mBinging!!.recyNewgood.adapter=newGoodsAdapter
+        mDataBinding!!.recyNewgood.adapter=newGoodsAdapter
         initNewGoods(newGoodsAdapter)
     }
 
     private fun initNewGoods(newGoodsAdapter: NewGoodsAdapter) {
-        viewModel!!.newGoods.observe(this,{
+        mViewModel!!.newGoods.observe(this, Observer{
             newGoodsAdapter.refreshData(it)
         })
     }
@@ -162,15 +153,15 @@ class HomeFragment : Fragment(),View.OnClickListener {
     private fun showBrand() {
 
         var layout = StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL)
-        mBinging!!.recyBrand.layoutManager =layout
+        mDataBinding!!.recyBrand.layoutManager =layout
         var brandAdapter = BrandAdapter(context)
-        mBinging!!.recyBrand.adapter = brandAdapter
+        mDataBinding!!.recyBrand.adapter = brandAdapter
         initVM(brandAdapter)
     }
 
     //刷新适配器
     private fun initVM(baseAdapter: BrandAdapter) {
-        viewModel!!.brand.observe(this,{
+        mViewModel!!.brand.observe(this, Observer{
             baseAdapter.refreshData(it)
         })
     }
@@ -178,7 +169,7 @@ class HomeFragment : Fragment(),View.OnClickListener {
 
     //商品类型
     private fun showChannel() {
-        viewModel!!.channel.observe(this,{
+        mViewModel!!.channel.observe(this,{
             for (i in it.indices) {
                 //获取布局
                 val view: View = LayoutInflater.from(activity).inflate(R.layout.home_item_channel, null)
@@ -191,7 +182,7 @@ class HomeFragment : Fragment(),View.OnClickListener {
                     1.0f
                 )
 
-                mBinging!!.linerChannel.addView(view)
+                mDataBinding!!.linerChannel.addView(view)
 
                 view.setTag(it.get(i))
 
@@ -218,14 +209,23 @@ class HomeFragment : Fragment(),View.OnClickListener {
 
     //banner图
     private fun showBanner() {
-        viewModel!!.bannner.observe(this,{
-            mBinging!!.bannerHome.setImages(it)
-            mBinging!!.bannerHome.setImageLoader(MyBannerAdapter())
-            mBinging!!.bannerHome.start()
+        mViewModel!!.bannner.observe(this, Observer{
+            mDataBinding!!.bannerHome.setImages(it)
+            mDataBinding!!.bannerHome.setImageLoader(MyBannerAdapter())
+            mDataBinding!!.bannerHome.start()
         })
 
     }
 
+    override fun initVM() {
+
+    }
+
+    override fun initData() {
+    }
+
+    override fun initVariable() {
+    }
 
 
 }

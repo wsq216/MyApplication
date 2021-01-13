@@ -30,56 +30,56 @@ class BindHomeViewModel:BaseViewModel(Injection.repository) {
             var result = repository.getHome()
             if (result.errno == 0) {
                 //banner图
-                bannner.postValue(result.data.data.banner)
+                bannner.postValue(result.data.banner)
                 //品牌制造商
-                brand.postValue(result.data.data.brandList)
+                brand.postValue(result.data.brandList)
                 //商品类型
-                channel.postValue(result.data.data.channel)
+                channel.postValue(result.data.channel)
                 //新品首发
-                newGoods.postValue(result.data.data.newGoodsList)
+                newGoods.postValue(result.data.newGoodsList)
                 //人气推荐
-                hot.postValue(result.data.data.hotGoodsList)
+                hot.postValue(result.data.hotGoodsList)
                 //专题
-                topic.postValue(result.data.data.topicList)
+                topic.postValue(result.data.topicList)
                 //居家
-                category.postValue(result.data.data.categoryList)
+                category.postValue(result.data.categoryList)
             } else if (result.errno == 665) {
                 refreshToken()
             }
         }
     }
-    fun  homeData(){
-        GlobalScope.launch {
-            loadData()
-        }
-    }
-
-    suspend fun loadData(){
-        var homeData = get("https://cdplay.cn/api/index")
-        if(homeData != null){
-            //banner图
-            bannner.postValue(homeData.data.banner)
-            //品牌制造商
-            brand.postValue(homeData.data.brandList)
-            //商品类型
-            channel.postValue(homeData.data.channel)
-            //新品首发
-            newGoods.postValue(homeData.data.newGoodsList)
-            //人气推荐
-            hot.postValue(homeData.data.hotGoodsList)
-            //专题
-            topic.postValue(homeData.data.topicList)
-            //居家
-            category.postValue(homeData.data.categoryList)
-        }else{
-        }
-    }
-
-    /**
-     * 网络请求
-     */
-    suspend fun get(str:String) = withContext(Dispatchers.IO){
-        var result = URL(str).readText(charset("utf-8"))
-        return@withContext Gson().fromJson<HomeData>(result, HomeData::class.java)
-    }
+//    fun  homeData(){
+//        GlobalScope.launch {
+//            loadData()
+//        }
+//    }
+//
+//    suspend fun loadData(){
+//        var homeData = get("https://cdplay.cn/api/index")
+//        if(homeData != null){
+//            //banner图
+//            bannner.postValue(homeData.banner)
+//            //品牌制造商
+//            brand.postValue(homeData.brandList)
+//            //商品类型
+//            channel.postValue(homeData.channel)
+//            //新品首发
+//            newGoods.postValue(homeData.newGoodsList)
+//            //人气推荐
+//            hot.postValue(homeData.hotGoodsList)
+//            //专题
+//            topic.postValue(homeData.topicList)
+//            //居家
+//            category.postValue(homeData.categoryList)
+//        }else{
+//        }
+//    }
+//
+//    /**
+//     * 网络请求
+//     */
+//    suspend fun get(str:String) = withContext(Dispatchers.IO){
+//        var result = URL(str).readText(charset("utf-8"))
+//        return@withContext Gson().fromJson<HomeData>(result, HomeData::class.java)
+//    }
 }

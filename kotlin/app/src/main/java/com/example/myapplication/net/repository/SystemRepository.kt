@@ -18,6 +18,7 @@ class SystemRepository {
     //初始化的方法
     init {
         serviceApi = RetrofitFactory.instance.create(ServiceApi::class.java)
+
     }
 
     /**
@@ -34,6 +35,7 @@ class SystemRepository {
     suspend fun getHome() = withContext(Dispatchers.IO){
         serviceApi.getHome()
     }
+
 
 //    /**
 //     * 获取专题数据
