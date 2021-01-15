@@ -1,12 +1,7 @@
 package com.example.myapplication.data.newgoods
 
-data class NewGoodsData(
-    val `data`: Datas,
-    val errmsg: String,
-    val errno: Int
-)
 
-data class Datas(
+data class NewGoodsData(
     val count: Int,
     val currentPage: Int,
     val `data`: List<DataX>,

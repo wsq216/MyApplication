@@ -60,4 +60,5 @@ class MainActivity : BaseActivity<BindMainViewModel, ActivityMainBinding>(
     override fun initVariable() {
     }
 
+
 }

@@ -36,6 +36,22 @@ class SystemRepository {
         serviceApi.getHome()
     }
 
+    /**
+     * 获取主页数据
+     */
+    suspend fun getBrand(page : String,size:String ) = withContext(Dispatchers.IO){
+        serviceApi.getBrand(page,size)
+    }
+
+
+    suspend fun getHot() = withContext(Dispatchers.IO){
+        serviceApi.getHot()
+    }
+
+    suspend fun getGoodList(map: HashMap<String,String>) = withContext(Dispatchers.IO){
+        serviceApi.getGoodList(map)
+    }
+
 
 //    /**
 //     * 获取专题数据

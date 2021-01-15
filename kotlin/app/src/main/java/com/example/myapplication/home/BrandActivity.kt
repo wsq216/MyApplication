@@ -2,6 +2,7 @@ package com.example.myapplication.home
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,7 +24,7 @@ class BrandActivity : AppCompatActivity() {
     }
 
     private fun initView() {
-        viewModel!!.brandData("1","1000")
+        viewModel!!.getBrand("1","1000")
         showBrand()
     }
 
@@ -36,7 +37,7 @@ class BrandActivity : AppCompatActivity() {
     }
 
     private fun initBrand() {
-        viewModel!!.data.observe(this,{
+        viewModel!!.data.observe(this, Observer{
             brandAdapter!!.refreshData(it)
         })
     }

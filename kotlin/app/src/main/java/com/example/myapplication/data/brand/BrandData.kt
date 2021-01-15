@@ -1,12 +1,8 @@
 package com.example.myapplication.data.brand
 
-data class BrandData(
-    val `data`: Data,
-    val errmsg: String,
-    val errno: Int
-)
 
-data class Data(
+
+data class BrandData(
     val count: Int,
     val currentPage: Int,
     val `data`: List<DataX>,

@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/tools">
 
     <data>
+        <import type="com.example.myapplication.data.Category"/>
+        <import type="com.example.myapplication.home.HomeFragment.TitleClick"/>
     <variable
         name="mBrand"
-        type="com.example.myapplication.data.Category" />
+        type="Category" />
+        <variable
+            name="homeClick"
+            type="TitleClick" />
     </data>
 
     <LinearLayout
@@ -59,7 +65,8 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:paddingVertical="@dimen/dp_10"
-                        android:text="品牌制作商直供"></TextView>
+                        android:text="品牌制作商直供"
+                        android:onClick="@{()->homeClick.clickBrand()}"></TextView>
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recy_brand"
@@ -69,6 +76,7 @@
 
                 <View
                     android:layout_width="match_parent"
+                    bind:imageUrl=""
                     android:layout_height="@dimen/dp_5"
                     android:background="#E3E3E3"></View>
 
@@ -83,7 +91,8 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:paddingVertical="@dimen/dp_10"
-                        android:text="周一周四·新品首发"></TextView>
+                        android:text="周一周四·新品首发"
+                        android:onClick="@{()->homeClick.clickNewGood()}"></TextView>
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recy_newgood"
@@ -131,7 +140,8 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:paddingVertical="@dimen/dp_10"
-                        android:text="专题精选"></TextView>
+                        android:text="专题精选"
+                        android:onClick="@{()->homeClick.clickTopic()}"></TextView>
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recy_topic"

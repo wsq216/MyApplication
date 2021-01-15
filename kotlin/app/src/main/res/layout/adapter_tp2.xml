@@ -1,18 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/tools">
 
     <data>
 
         <variable
             name="vmTp2"
             type="com.example.myapplication.data.hot.Discover" />
+        <variable
+            name="hotTwo"
+            type="com.example.myapplication.base.IItemClick" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/dp_20">
+        android:layout_margin="@dimen/dp_20"
+        android:onClick="@{(view)->hotTwo.itemClick(view.tag)}">
 
 
         <TextView
@@ -38,6 +43,8 @@
             android:scaleType="centerCrop"
             android:layout_width="@dimen/dp_100"
             android:layout_height="@dimen/dp_100"
+            bind:imgUrl="@{vmTp2.filePathList.get(0).filePath}"
+            bind:corner="@{vmTp2.corner}"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>

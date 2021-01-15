@@ -2,123 +2,139 @@ package com.example.myapplication.home
 
 import android.annotation.SuppressLint
 import android.graphics.Color
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupWindow
-import androidx.appcompat.app.AppCompatActivity
+import android.widget.TextView
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
+import androidx.databinding.library.baseAdapters.BR
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.bumptech.glide.Glide
 import com.example.myapplication.R
 import com.example.myapplication.adapter.newgoods.NewGoodsAdapter
+import com.example.myapplication.app.Constants
+import com.example.myapplication.data.newgoods.FilterCategory
 import com.example.myapplication.databinding.ActivityNewGoodsBinding
 import com.example.myapplication.viewmodel.BindNewGoodsViewModel
+import com.shop.base.BaseActivity
+import kotlinx.android.synthetic.main.hot_pop.*
+import kotlinx.android.synthetic.main.hot_pop.view.*
 
-class NewGoodsActivity : AppCompatActivity(), View.OnClickListener {
-    //接口参数
-    val ASC = "asc"
-    val DESC = "desc"
-    val DEFAULT = "default"
-    val PRICE = "price"
-    val CATEGORY = "category"
-    var CATEGORYID = 0
+class NewGoodsActivity : BaseActivity<BindNewGoodsViewModel, ActivityNewGoodsBinding>(
+    R.layout.activity_new_goods,
+    BindNewGoodsViewModel::class.java
+), View.OnClickListener {
+    //是否是新品
+    var isNew = 1
+    var page = 1
+    var size = 100
+    var order: String? = null
+    var sort: String? = null
+    var categoryId = 0
 
     var view: View? = null
 
+    var bindingUtil: ViewDataBinding? = null
+
     var popupWindow: PopupWindow? = null
 
-    var mBinging: ActivityNewGoodsBinding? = null
 
-    var viewModel: BindNewGoodsViewModel? = null
+    var newGoodsAdapter: NewGoodsAdapter? = null
 
-    var newGoodsAdapter : NewGoodsAdapter? = null
+    var it: List<FilterCategory> = listOf<FilterCategory>()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        mBinging = DataBindingUtil.setContentView(this, R.layout.activity_new_goods)
-
-        viewModel = ViewModelProvider(this).get(BindNewGoodsViewModel::class.java)
-
-        initView()
-        initViewList(ASC, DEFAULT, CATEGORYID)
-        showNewGoods()
-        initClick()
+    /**
+     * 组装当前的接口参数
+     * @return
+     */
+    private fun getParam(): HashMap<String, String>? {
+        val map = HashMap<String, String>()
+        map["isNew"] = isNew.toString()
+        map["page"] = page.toString()
+        map["size"] = size.toString()
+        map["order"] = order!!
+        map["sort"] = sort!!
+        map["categoryId"] = categoryId.toString()
+        return map
     }
 
+
     private fun showNewGoods() {
-        mBinging!!.recyGoodList.layoutManager =
+        mDataBinding!!.recyGoodList.layoutManager =
             StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         newGoodsAdapter = NewGoodsAdapter(this)
-        mBinging!!.recyGoodList.adapter = newGoodsAdapter
+        mDataBinding!!.recyGoodList.adapter = newGoodsAdapter
         initVm()
     }
 
-    private fun initVm() {
-        viewModel!!.dataX.observe(this,{
+    fun initVm() {
+        mViewModel!!.dataX.observe(this, {
             newGoodsAdapter!!.refreshData(it)
         })
     }
 
     private fun initClick() {
-        mBinging!!.layoutPrice.setOnClickListener(this)
-        mBinging!!.txtAll.setOnClickListener(this)
-        mBinging!!.txtSort.setOnClickListener(this)
+        mDataBinding!!.layoutPrice.setOnClickListener(this)
+        mDataBinding!!.txtAll.setOnClickListener(this)
+        mDataBinding!!.txtSort.setOnClickListener(this)
     }
 
-    private fun initViewList(order: String, sort: String, categoryId: Int) {
-        viewModel!!.newGoodsListData(order, sort, categoryId)
-    }
-
-    private fun initView() {
-        viewModel!!.newGoodsData()
+    override fun initView() {
+        mViewModel!!.getHot()
         showHot()
-        mBinging!!.layoutPrice.setTag(0)
-        mBinging!!.txtAll.setTextColor(this.resources.getColor(R.color.red))
+        order = Constants.ASC
+        sort = Constants.DEFAULT
+        getParam()?.let { mViewModel.getGoodList(it) }
+        showNewGoods()
+        initClick()
+        mDataBinding!!.layoutPrice.setTag(0)
+        mDataBinding!!.txtAll.setTextColor(this.resources.getColor(R.color.red))
         newPop()
     }
 
     private fun showHot() {
-        viewModel!!.hotdata.observe(this, Observer{
-            mBinging!!.txtInfo.setText(it.name)
-            Glide.with(this).load(it.img_url).into(mBinging!!.imgHotgood)
+        mViewModel!!.hotdata.observe(this, Observer {
+            mDataBinding!!.setVariable(BR.vmNewGoodsActivity, it)
+            Toast.makeText(this, it.img_url, Toast.LENGTH_SHORT).show()
+            Glide.with(this).load(it.img_url).into(mDataBinding!!.imgHotgood)
         })
     }
 
     fun newPop() {
         view = LayoutInflater.from(this).inflate(R.layout.hot_pop, null)
+        bindingUtil = DataBindingUtil.bind(this.view!!)
         popupWindow = PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, 300)
         popupWindow!!.isAttachedInDecor = true
     }
 
     fun pop() {
-        popupWindow!!.showAsDropDown(mBinging!!.txtSort)
-
-
+        popupWindow!!.showAsDropDown(mDataBinding!!.txtSort)
+        bindingUtil!!.setVariable(BR.popClick, PopClick())
     }
 
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.layout_price -> {
-                val tag = mBinging!!.layoutPrice.getTag()
+                val tag = mDataBinding!!.layoutPrice.getTag()
                 if (tag == 0) {
                     resetPriceState();
                     priceStateUp();
-                    mBinging!!.layoutPrice.setTag(1);
-                    viewModel!!.newGoodsListData(ASC, DEFAULT, CATEGORYID)
-                    initViewList(ASC, PRICE, CATEGORYID)
-                    initVm()
+                    mDataBinding!!.layoutPrice.setTag(1);
+                    order = Constants.ASC
                 } else if (tag == 1) {
                     resetPriceState();
                     priceStateDown();
-                    mBinging!!.layoutPrice.setTag(0);
-                    viewModel!!.newGoodsListData(DESC, DEFAULT, CATEGORYID)
-                    initViewList(DESC, PRICE, CATEGORYID)
-                    initVm()
+                    mDataBinding!!.layoutPrice.setTag(0);
+                    order = Constants.DESC
                 }
+                sort = Constants.PRICE
+                Toast.makeText(this, "$tag", Toast.LENGTH_SHORT).show()
+                getParam()?.let { mViewModel.getGoodList(it) }
                 if (popupWindow != null) {
                     popupWindow!!.dismiss();
                 }
@@ -126,8 +142,9 @@ class NewGoodsActivity : AppCompatActivity(), View.OnClickListener {
             R.id.txt_all -> {
                 //恢复到默认状态
                 resetPriceState();
-                mBinging!!.txtAll.setTextColor(this.resources.getColor(R.color.red))
-                viewModel!!.newGoodsListData(ASC, DEFAULT, CATEGORYID)
+                mDataBinding!!.txtAll.setTextColor(this.resources.getColor(R.color.red))
+                sort = Constants.DEFAULT
+                getParam()?.let { mViewModel.getGoodList(it) }
                 initVm()
                 if (popupWindow != null) {
                     popupWindow!!.dismiss();
@@ -136,7 +153,7 @@ class NewGoodsActivity : AppCompatActivity(), View.OnClickListener {
             R.id.txt_sort -> {
                 //恢复到默认状态
                 resetPriceState();
-                mBinging!!.txtSort.setTextColor(this.resources.getColor(R.color.red))
+                mDataBinding!!.txtSort.setTextColor(this.resources.getColor(R.color.red))
                 //弹出弹框
                 pop()
             }
@@ -144,29 +161,132 @@ class NewGoodsActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun resetPriceState() {
-        mBinging!!.imgArrowUp.setImageResource(R.mipmap.ic_arrow_up_normal)
-        mBinging!!.imgArrowDown.setImageResource(R.mipmap.ic_arrow_down_normal)
-        mBinging!!.txtPrice.setTextColor(this.resources.getColor(R.color.black))
-        mBinging!!.txtAll.setTextColor(this.resources.getColor(R.color.black))
-        mBinging!!.txtSort.setTextColor(this.resources.getColor(R.color.black))
-        mBinging!!.layoutPrice.setTag(0)
+        mDataBinding!!.imgArrowUp.setImageResource(R.mipmap.ic_arrow_up_normal)
+        mDataBinding!!.imgArrowDown.setImageResource(R.mipmap.ic_arrow_down_normal)
+        mDataBinding!!.txtPrice.setTextColor(this.resources.getColor(R.color.black))
+        mDataBinding!!.txtAll.setTextColor(this.resources.getColor(R.color.black))
+        mDataBinding!!.txtSort.setTextColor(this.resources.getColor(R.color.black))
+        mDataBinding!!.layoutPrice.setTag(0)
     }
 
     /**
      * 按价格升序排序
      */
     private fun priceStateUp() {
-        mBinging!!.imgArrowUp.setImageResource(R.mipmap.ic_arrow_up_select)
-        mBinging!!.imgArrowDown.setImageResource(R.mipmap.ic_arrow_down_normal)
-        mBinging!!.txtPrice.setTextColor(this.resources.getColor(R.color.red))
+        mDataBinding!!.imgArrowUp.setImageResource(R.mipmap.ic_arrow_up_select)
+        mDataBinding!!.imgArrowDown.setImageResource(R.mipmap.ic_arrow_down_normal)
+        mDataBinding!!.txtPrice.setTextColor(this.resources.getColor(R.color.red))
     }
 
     /**
      * 价格的降序排列
      */
     private fun priceStateDown() {
-        mBinging!!.imgArrowUp.setImageResource(R.mipmap.ic_arrow_up_normal)
-        mBinging!!.imgArrowDown.setImageResource(R.mipmap.ic_arrow_down_select)
-        mBinging!!.txtPrice.setTextColor(this.resources.getColor(R.color.red))
+        mDataBinding!!.imgArrowUp.setImageResource(R.mipmap.ic_arrow_up_normal)
+        mDataBinding!!.imgArrowDown.setImageResource(R.mipmap.ic_arrow_down_select)
+        mDataBinding!!.txtPrice.setTextColor(this.resources.getColor(R.color.red))
+    }
+
+
+    inner class PopClick {
+        fun all() {
+            val name1: String = view!!.all.getText().toString()
+            initList(name1, view!!.all)
+        }
+
+        fun home() {
+            val name1: String = view!!.home.getText().toString()
+            for (item in it) {
+                if (item.name == name1) {
+                    sort = Constants.CATEGORY
+                    order = Constants.ASC
+                    categoryId = item.id
+                    getParam()?.let { mViewModel.getGoodList(it) }
+                    initVm()
+                    break
+                }
+            }
+//            initList(name1, view!!.home)
+        }
+
+        fun dinner() {
+            val name1: String = view!!.dinner.getText().toString()
+            sort = Constants.CATEGORY
+            order = Constants.ASC
+            categoryId = 1005001
+            getParam()?.let { mViewModel.getGoodList(it) }
+            initVm()
+
+//            initList(name1, view!!.dinner)
+        }
+
+        fun chider() {
+            val name1: String = view!!.chider.getText().toString()
+            initList(name1, view!!.chider)
+        }
+
+        fun cargo() {
+            val name1: String = view!!.cargo.getText().toString()
+            initList(name1, view!!.cargo)
+        }
+
+        fun diet() {
+            val name1: String = view!!.diet.getText().toString()
+            initList(name1, view!!.diet)
+        }
+    }
+
+    protected fun initList(name1: String, txt: TextView) {
+        initColor()
+        for (i in it) {
+            if (name1 == i.name) {
+                sort = Constants.CATEGORY
+                order = Constants.ASC
+                categoryId = i.id
+                Toast.makeText(this, "${i.id}", Toast.LENGTH_SHORT).show()
+                getParam()?.let { mViewModel.getGoodList(it) }
+                initVm()
+                Toast.makeText(this, "${i.name}", Toast.LENGTH_SHORT).show()
+                popupWindow!!.dismiss()
+                if (txt != null) {
+                    txt.setText("daf")
+                    txt.setTextColor(this.resources.getColor(R.color.red))
+                    txt.setBackgroundResource(R.drawable.shap)
+                } else {
+                    Toast.makeText(this, "txt空", Toast.LENGTH_SHORT).show()
+                }
+                break
+            }
+        }
+
+    }
+
+
+    @SuppressLint("ResourceType")
+    private fun initColor() {
+        view!!.all.setTextColor(this.resources.getColor(R.color.black))
+        view!!.home.setTextColor(this.resources.getColor(R.color.black))
+        view!!.dinner.setTextColor(this.resources.getColor(R.color.black))
+        view!!.chider.setTextColor(this.resources.getColor(R.color.black))
+        view!!.cargo.setTextColor(this.resources.getColor(R.color.black))
+        view!!.diet.setTextColor(this.resources.getColor(R.color.black))
+
+        view!!.all.setBackgroundResource(R.drawable.shap1)
+        view!!.home.setBackgroundResource(R.drawable.shap1)
+        view!!.dinner.setBackgroundResource(R.drawable.shap1)
+        view!!.chider.setBackgroundResource(R.drawable.shap1)
+        view!!.cargo.setBackgroundResource(R.drawable.shap1)
+        view!!.diet.setBackgroundResource(R.drawable.shap1)
+    }
+
+
+    override fun initData() {
+    }
+
+    override fun initVariable() {
+    }
+
+    override fun initVM() {
+
     }
 }

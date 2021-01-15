@@ -1,12 +1,7 @@
 package com.example.myapplication.data.newgoods
 
-data class HotData(
-    val `data`: Data,
-    val errmsg: String,
-    val errno: Int
-)
 
-data class Data(
+data class HotData(
     val bannerInfo: BannerInfo
 )
 

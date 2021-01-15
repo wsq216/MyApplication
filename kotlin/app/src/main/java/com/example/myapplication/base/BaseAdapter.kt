@@ -35,7 +35,7 @@ open abstract class BaseAdapter<D>(var context: Context,var list:List<D>,var lay
         //获取layout id所对应的BR的id
         var type = layouts.get(layoutId)
         holder.dataBinding.setVariable(type,list.get(position))
-        holder.dataBinding.root.tag = position
+        holder.dataBinding.root.tag = list.get(position)
 
         bindData(holder.dataBinding,list.get(position),layoutId)
     }

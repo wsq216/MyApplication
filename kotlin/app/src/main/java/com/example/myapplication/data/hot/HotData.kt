@@ -18,6 +18,7 @@ data class Status(
 )
 
 data class Discover(
+    val corner : Int = 8,
     val author: String,
     val cagetory: String,
     val commID: Int,

@@ -1,77 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:orientation="vertical"
-    android:background="#fff"
-    android:layout_margin="@dimen/dp_10"
-    android:layout_height="@dimen/dp_100">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <data>
+
+        <import type="com.example.myapplication.home.NewGoodsActivity.PopClick" />
+        <import type="com.example.myapplication.data.newgoods.FilterCategory"/>
+        <variable
+            name="popGoods"
+            type="FilterCategory" />
+        <variable
+            name="popClick"
+            type="PopClick" />
+    </data>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView
-            android:text="全部"
-            android:id="@+id/all"
-            android:textColor="@color/red"
-            android:layout_margin="@dimen/dp_10"
-            android:background="@drawable/shap"
-            android:layout_width="@dimen/dp_40"
-            android:gravity="center"
-            android:textStyle="bold"
-            android:layout_height="@dimen/dp_30"/>
-        <TextView
-            android:text="居家"
-            android:id="@+id/home"
-            android:layout_margin="@dimen/dp_10"
-            android:textColor="@color/color"
-            android:background="@drawable/shap1"
-            android:layout_width="@dimen/dp_40"
-            android:gravity="center"
-            android:textStyle="bold"
-            android:layout_height="@dimen/dp_30"/>
-        <TextView
-            android:text="餐厨"
-            android:id="@+id/dinner"
-            android:layout_margin="@dimen/dp_10"
-            android:textColor="@color/color"
-            android:background="@drawable/shap1"
-            android:layout_width="@dimen/dp_40"
-            android:gravity="center"
-            android:textStyle="bold"
-            android:layout_height="@dimen/dp_30"/>
-        <TextView
-            android:text="婴童"
-            android:layout_margin="@dimen/dp_10"
-            android:id="@+id/chider"
-            android:textColor="@color/color"
-            android:background="@drawable/shap1"
-            android:layout_width="@dimen/dp_40"
-            android:gravity="center"
-            android:textStyle="bold"
-            android:layout_height="@dimen/dp_30"/>
-        <TextView
-            android:text="杂货"
-            android:id="@+id/cargo"
-            android:layout_margin="@dimen/dp_10"
-            android:textColor="@color/color"
-            android:background="@drawable/shap1"
-            android:layout_width="@dimen/dp_40"
-            android:gravity="center"
-            android:textStyle="bold"
-            android:layout_height="@dimen/dp_30"/>
-    </LinearLayout>
-
-    <TextView
-        android:text="饮食"
-        android:id="@+id/diet"
+        android:layout_height="@dimen/dp_100"
         android:layout_margin="@dimen/dp_10"
-        android:textColor="@color/color"
-        android:background="@drawable/shap1"
-        android:layout_width="@dimen/dp_40"
-        android:gravity="center"
-        android:textStyle="bold"
-        android:layout_height="@dimen/dp_30"/>
+        android:background="#fff"
+        android:orientation="vertical">
 
 
-</LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/all"
+                android:layout_width="@dimen/dp_40"
+                android:layout_height="@dimen/dp_30"
+                android:layout_margin="@dimen/dp_10"
+                android:background="@drawable/shap"
+                android:gravity="center"
+                android:onClick="@{(view)->popClick.all()}"
+                android:text="全部"
+                android:textColor="@color/red"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/home"
+                android:layout_width="@dimen/dp_40"
+                android:layout_height="@dimen/dp_30"
+                android:layout_margin="@dimen/dp_10"
+                android:background="@drawable/shap1"
+                android:gravity="center"
+                android:onClick="@{(view)->popClick.home()}"
+                android:text="居家"
+                android:textColor="@color/color"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/dinner"
+                android:layout_width="@dimen/dp_40"
+                android:layout_height="@dimen/dp_30"
+                android:layout_margin="@dimen/dp_10"
+                android:background="@drawable/shap1"
+                android:gravity="center"
+                android:onClick="@{(view)->popClick.dinner()}"
+                android:text="餐厨"
+                android:textColor="@color/color"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/chider"
+                android:layout_width="@dimen/dp_40"
+                android:layout_height="@dimen/dp_30"
+                android:layout_margin="@dimen/dp_10"
+                android:background="@drawable/shap1"
+                android:gravity="center"
+                android:onClick="@{(view)->popClick.chider()}"
+                android:text="婴童"
+                android:textColor="@color/color"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/cargo"
+                android:layout_width="@dimen/dp_40"
+                android:layout_height="@dimen/dp_30"
+                android:layout_margin="@dimen/dp_10"
+                android:background="@drawable/shap1"
+                android:gravity="center"
+                android:onClick="@{(view)->popClick.cargo()}"
+                android:text="杂货"
+                android:textColor="@color/color"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/diet"
+            android:layout_width="@dimen/dp_40"
+            android:layout_height="@dimen/dp_30"
+            android:layout_margin="@dimen/dp_10"
+            android:background="@drawable/shap1"
+            android:gravity="center"
+            android:onClick="@{(view)->popClick.diet()}"
+            android:text="饮食"
+            android:textColor="@color/color"
+            android:textStyle="bold" />
+
+
+    </LinearLayout>
+</layout>

@@ -2,7 +2,9 @@ package com.example.myapplication.adapter.tp
 
 import android.content.Context
 import android.util.SparseArray
+import android.widget.Toast
 import androidx.databinding.ViewDataBinding
+import androidx.databinding.library.baseAdapters.BR
 import com.bumptech.glide.Glide
 import com.example.myapplication.R
 import com.example.myapplication.base.BaseAdapter
@@ -10,7 +12,7 @@ import com.example.myapplication.base.IItemClick
 import com.example.myapplication.data.hot.Discover
 
 
-class TpAdapter(context: Context, list: List<Discover>, layouts: SparseArray<Int>,clickEvts: IItemClick<Discover>) :
+class TpAdapter(context: Context, list: List<Discover>, layouts: SparseArray<Int>,var clickEvts: IItemClick<Discover>) :
     BaseAdapter<Discover>(context, list, layouts,clickEvts) {
     override fun layoutId(position: Int): Int {
         var url = list.get(position).filePathList
@@ -40,17 +42,20 @@ class TpAdapter(context: Context, list: List<Discover>, layouts: SparseArray<Int
             if (url.size == 0) {
 
             } else if (url.size == 1) {
-                Glide.with(context).load(url.get(0).filePath)
-                    .into(binding.root.findViewById(R.id.img12))
+                binding.setVariable(BR.hotTwo,clickEvts)
+//                Glide.with(context).load(url.get(0).filePath)
+//                    .into(binding.root.findViewById(R.id.img12))
             } else if (url.size == 3) {
-                Glide.with(context).load(url.get(0).filePath)
-                    .into(binding.root.findViewById(R.id.img11))
-                Glide.with(context).load(url.get(1).filePath)
-                    .into(binding.root.findViewById(R.id.img22))
-                Glide.with(context).load(url.get(2).filePath)
-                    .into(binding.root.findViewById(R.id.img33))
+                binding.setVariable(BR.hotThree,clickEvts)
+//                Glide.with(context).load(url.get(0).filePath)
+//                    .into(binding.root.findViewById(R.id.img11))
+//                Glide.with(context).load(url.get(1).filePath)
+//                    .into(binding.root.findViewById(R.id.img22))
+//                Glide.with(context).load(url.get(2).filePath)
+//                    .into(binding.root.findViewById(R.id.img33))
             }
         }
     }
+
 
 }

@@ -6,6 +6,7 @@ import android.os.Parcel
 import android.os.Parcelable
 import android.util.Log
 import android.util.SparseArray
+import android.widget.Toast
 import androidx.databinding.library.baseAdapters.BR
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -60,8 +61,7 @@ class HotActivity() : BaseActivity<BindHotViewModel,ActivityHotBinding>(R.layout
     inner class ItemClick: IItemClick<Discover> {
 
         override fun itemClick(data: Discover) {
-            Log.i("TAG","onclick")
-
+            Toast.makeText(this@HotActivity,data.title,Toast.LENGTH_SHORT).show()
         }
     }
 

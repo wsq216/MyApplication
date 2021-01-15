@@ -1,18 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/tools">
 
     <data>
 
         <variable
             name="vmTp3"
             type="com.example.myapplication.data.hot.Discover" />
+
+        <variable
+            name="hotThree"
+            type="com.example.myapplication.base.IItemClick" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/dp_10">
+        android:layout_margin="@dimen/dp_10"
+        android:onClick="@{(view)->hotThree.itemClick(view.tag)}">
 
         <TextView
             android:id="@+id/title_tong"
@@ -32,12 +38,18 @@
 
             <ImageView
                 android:id="@+id/img11"
+                android:scaleType="centerCrop"
                 android:layout_width="@dimen/dp_100"
                 android:layout_height="@dimen/dp_100"
+                bind:imgUrl="@{vmTp3.filePathList.get(0).filePath}"
+                bind:corner="@{vmTp3.corner}"
                 android:layout_weight="1" />
 
             <ImageView
+                android:scaleType="centerCrop"
                 android:id="@+id/img22"
+                bind:imgUrl="@{vmTp3.filePathList.get(1).filePath}"
+                bind:corner="@{vmTp3.corner}"
                 android:layout_width="@dimen/dp_100"
                 android:layout_height="@dimen/dp_100"
                 android:layout_marginLeft="@dimen/dp_10"
@@ -45,8 +57,11 @@
 
             <ImageView
                 android:id="@+id/img33"
+                android:scaleType="centerCrop"
                 android:layout_width="@dimen/dp_100"
                 android:layout_height="@dimen/dp_100"
+                bind:imgUrl="@{vmTp3.filePathList.get(2).filePath}"
+                bind:corner="@{vmTp3.corner}"
                 android:layout_marginLeft="@dimen/dp_10"
                 android:layout_weight="1" />
 
