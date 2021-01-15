@@ -46,7 +46,7 @@ class NewGoodsActivity : BaseActivity<BindNewGoodsViewModel, ActivityNewGoodsBin
 
     var newGoodsAdapter: NewGoodsAdapter? = null
 
-    var it: List<FilterCategory> = listOf<FilterCategory>()
+    var it: List<FilterCategory>? = null
 
     /**
      * 组装当前的接口参数
@@ -106,6 +106,7 @@ class NewGoodsActivity : BaseActivity<BindNewGoodsViewModel, ActivityNewGoodsBin
     }
 
     fun newPop() {
+        mViewModel!!.filterCategory.observe(this, Observer { this.it = it })
         view = LayoutInflater.from(this).inflate(R.layout.hot_pop, null)
         bindingUtil = DataBindingUtil.bind(this.view!!)
         popupWindow = PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, 300)
@@ -144,6 +145,7 @@ class NewGoodsActivity : BaseActivity<BindNewGoodsViewModel, ActivityNewGoodsBin
                 resetPriceState();
                 mDataBinding!!.txtAll.setTextColor(this.resources.getColor(R.color.red))
                 sort = Constants.DEFAULT
+                categoryId = 0
                 getParam()?.let { mViewModel.getGoodList(it) }
                 initVm()
                 if (popupWindow != null) {
@@ -196,28 +198,13 @@ class NewGoodsActivity : BaseActivity<BindNewGoodsViewModel, ActivityNewGoodsBin
 
         fun home() {
             val name1: String = view!!.home.getText().toString()
-            for (item in it) {
-                if (item.name == name1) {
-                    sort = Constants.CATEGORY
-                    order = Constants.ASC
-                    categoryId = item.id
-                    getParam()?.let { mViewModel.getGoodList(it) }
-                    initVm()
-                    break
-                }
-            }
-//            initList(name1, view!!.home)
+
+            initList(name1, view!!.home)
         }
 
         fun dinner() {
             val name1: String = view!!.dinner.getText().toString()
-            sort = Constants.CATEGORY
-            order = Constants.ASC
-            categoryId = 1005001
-            getParam()?.let { mViewModel.getGoodList(it) }
-            initVm()
-
-//            initList(name1, view!!.dinner)
+            initList(name1, view!!.dinner)
         }
 
         fun chider() {
@@ -238,27 +225,19 @@ class NewGoodsActivity : BaseActivity<BindNewGoodsViewModel, ActivityNewGoodsBin
 
     protected fun initList(name1: String, txt: TextView) {
         initColor()
-        for (i in it) {
-            if (name1 == i.name) {
+        for (item in it!!) {
+            if (item.name == name1) {
                 sort = Constants.CATEGORY
                 order = Constants.ASC
-                categoryId = i.id
-                Toast.makeText(this, "${i.id}", Toast.LENGTH_SHORT).show()
+                categoryId = item.id
                 getParam()?.let { mViewModel.getGoodList(it) }
                 initVm()
-                Toast.makeText(this, "${i.name}", Toast.LENGTH_SHORT).show()
                 popupWindow!!.dismiss()
-                if (txt != null) {
-                    txt.setText("daf")
-                    txt.setTextColor(this.resources.getColor(R.color.red))
-                    txt.setBackgroundResource(R.drawable.shap)
-                } else {
-                    Toast.makeText(this, "txt空", Toast.LENGTH_SHORT).show()
-                }
+                txt.setTextColor(this.resources.getColor(R.color.red))
+                txt.setBackgroundResource(R.drawable.shap)
                 break
             }
         }
-
     }
 
 
