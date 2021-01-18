@@ -4,9 +4,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <import type="com.example.myapplication.data.newgoods.BannerInfo"/>
         <variable
             name="vmNewGoodsActivity"
-            type="com.example.myapplication.data.newgoods.BannerInfo" />
+            type="BannerInfo" />
 
     </data>
 

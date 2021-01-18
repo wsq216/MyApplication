@@ -52,6 +52,22 @@ class SystemRepository {
         serviceApi.getGoodList(map)
     }
 
+    suspend fun getIndex(id:String) = withContext(Dispatchers.IO){
+        serviceApi.getIndex(id)
+    }
+
+    suspend fun getCurrent(id: String) = withContext(Dispatchers.IO){
+        serviceApi.getCurrent(id)
+    }
+
+    suspend fun getCategoryTab(id: String) = withContext(Dispatchers.IO){
+        serviceApi.getCategoryTab(id)
+    }
+
+    suspend fun getCategoryList(id: String) = withContext(Dispatchers.IO){
+        serviceApi.getCategoryList(id)
+    }
+
 
 //    /**
 //     * 获取专题数据

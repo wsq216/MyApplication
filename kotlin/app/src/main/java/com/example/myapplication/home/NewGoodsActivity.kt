@@ -100,7 +100,6 @@ class NewGoodsActivity : BaseActivity<BindNewGoodsViewModel, ActivityNewGoodsBin
     private fun showHot() {
         mViewModel!!.hotdata.observe(this, Observer {
             mDataBinding!!.setVariable(BR.vmNewGoodsActivity, it)
-            Toast.makeText(this, it.img_url, Toast.LENGTH_SHORT).show()
             Glide.with(this).load(it.img_url).into(mDataBinding!!.imgHotgood)
         })
     }
@@ -134,7 +133,6 @@ class NewGoodsActivity : BaseActivity<BindNewGoodsViewModel, ActivityNewGoodsBin
                     order = Constants.DESC
                 }
                 sort = Constants.PRICE
-                Toast.makeText(this, "$tag", Toast.LENGTH_SHORT).show()
                 getParam()?.let { mViewModel.getGoodList(it) }
                 if (popupWindow != null) {
                     popupWindow!!.dismiss();

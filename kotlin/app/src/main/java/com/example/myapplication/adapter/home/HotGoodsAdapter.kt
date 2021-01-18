@@ -10,8 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.myapplication.R
 import com.example.myapplication.data.HotGoods
-import com.example.myapplication.data.NewGoods
-import kotlinx.android.synthetic.main.home_item_channel.view.*
 import kotlinx.android.synthetic.main.home_item_hotgoods.view.*
 
 class HotGoodsAdapter(var context: Context?,var list: List<HotGoods> = listOf<HotGoods>())

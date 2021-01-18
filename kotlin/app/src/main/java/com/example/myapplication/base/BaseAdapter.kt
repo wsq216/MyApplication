@@ -15,7 +15,8 @@ import androidx.recyclerview.widget.RecyclerView
  * layouts 布局id与界面绑定name的id匹配使用
  * adapter通过DataBindingUtil实现界面和数据的绑定   ViewDataBinding
  */
-open abstract class BaseAdapter<D>(var context: Context,var list:List<D>,var layouts:SparseArray<Int>,var itemClick:IItemClick<D>):RecyclerView.Adapter<BaseAdapter<D>.BaseVH>() {
+open abstract class BaseAdapter<D>(var context: Context?, var list:List<D>, var layouts:SparseArray<Int>,
+                                    var itemClick:IItemClick<D>):RecyclerView.Adapter<BaseAdapter<D>.BaseVH>() {
 
     /**
      * 用来初始化创建ViewHolder

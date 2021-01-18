@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="vmCateGoryList"
+            type="com.example.myapplication.model.zt.DataX" />
+    </data>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:id="@+id/liner"
+        android:gravity="center"
+        android:background="#F1EEEE"
+        android:layout_margin="@dimen/dp_2"
+        android:layout_width="@dimen/dp_200"
+        android:layout_height="@dimen/dp_200">
+
+        <ImageView
+            android:layout_width="@dimen/dp_150"
+            android:layout_height="@dimen/dp_150"
+            android:src="@mipmap/ic_menu_me_nor"
+            android:id="@+id/new_pic_url"
+            bind:imageUrl="@{vmCateGoryList.list_pic_url}"></ImageView>
+
+        <TextView
+            android:layout_width="@dimen/dp_150"
+            android:layout_height="wrap_content"
+            android:text="@{vmCateGoryList.name}"
+            android:singleLine="true"
+            android:maxEms="10"
+            android:layout_margin="@dimen/dp_8"
+            android:textSize="@dimen/sp_12"
+            android:gravity="center"
+            android:id="@+id/name" />
+
+        <TextView
+            android:layout_width="@dimen/dp_150"
+            android:layout_height="wrap_content"
+            android:text="@{vmCateGoryList.retail_price}"
+            android:gravity="center"
+            android:textSize="@dimen/sp_10"
+            android:textColor="#E60F0F"
+            android:id="@+id/floor_price" />
+
+
+    </LinearLayout>
+</layout>

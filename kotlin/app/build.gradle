@@ -81,4 +81,7 @@ dependencies {
     kapt  "com.android.databinding:compiler:3.5.0"
     //mmkv数据保存
     implementation 'com.tencent:mmkv-static:1.0.23'
+
+    //竖导航
+    implementation "q.rorbin:VerticalTabLayout:1.2.5"
 }

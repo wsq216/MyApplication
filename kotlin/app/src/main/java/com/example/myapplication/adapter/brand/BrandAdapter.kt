@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.myapplication.R
 import com.example.myapplication.adapter.home.BaseViewHolder
-import com.example.myapplication.data.Goods
 import com.example.myapplication.data.brand.DataX
 import kotlinx.android.synthetic.main.brand_item_list.view.*
 

@@ -5,6 +5,10 @@ import com.example.myapplication.data.HomeData
 import com.example.myapplication.data.brand.BrandData
 import com.example.myapplication.data.hot.HotData
 import com.example.myapplication.data.newgoods.NewGoodsData
+import com.example.myapplication.data.sort.CurrentData
+import com.example.myapplication.data.sort.IndexData
+import com.example.myapplication.model.zt.CategoryData
+import com.example.myapplication.model.zt.CategroyListData
 import com.shop.net.BaseResp
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -30,6 +34,21 @@ interface ServiceApi {
     //商品列表详情
     @GET("goods/list")
     suspend fun getGoodList(@QueryMap map: HashMap<String, String>):BaseResp<NewGoodsData>
+
+    //分类竖着导航
+    @GET("catalog/index?")
+    suspend fun getIndex(@Query("id") id : String):BaseResp<IndexData>
+    //分类右边对应的当前分类的数据
+    @GET("catalog/current?")
+    suspend fun getCurrent(@Query("id") id : String):BaseResp<CurrentData>
+
+    //频道商品分类的顶部导航数据接口
+    @GET("goods/category")
+    suspend fun getCategoryTab(@Query("id") id: String):BaseResp<CategoryData>
+
+    //频道商品获取当前分类的列表数据
+    @GET("goods/list")
+    suspend fun getCategoryList(@Query("categoryId") id:String) :BaseResp<CategroyListData>
 //    //http://cdwan.cn:7000/tongpao/discover/hot.json
 //    @GET("tongpao/discover/hot.json")
 //    suspend fun getHot():BaseResp<HotData>

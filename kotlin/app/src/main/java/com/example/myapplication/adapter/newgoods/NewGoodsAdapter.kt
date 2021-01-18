@@ -1,9 +1,7 @@
 package com.example.myapplication.adapter.newgoods
 
 import android.content.Context
-import android.database.DatabaseUtils
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
@@ -12,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.myapplication.R
 import com.example.myapplication.adapter.home.BaseViewHolder
-import com.example.myapplication.data.Brand
 import com.example.myapplication.data.newgoods.DataX
 import kotlinx.android.synthetic.main.home_item_brand.view.*
 

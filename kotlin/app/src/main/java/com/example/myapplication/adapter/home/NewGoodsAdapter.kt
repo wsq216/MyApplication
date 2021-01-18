@@ -1,7 +1,6 @@
 package com.example.myapplication.adapter.home
 
 import android.content.Context
-import android.media.Image
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -11,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.myapplication.R
 import com.example.myapplication.data.NewGoods
-import kotlinx.android.synthetic.main.home_item_channel.view.*
 import kotlinx.android.synthetic.main.home_item_newgoods.view.*
 
 class NewGoodsAdapter(var context: Context?,var list: List<NewGoods> = listOf<NewGoods>())
