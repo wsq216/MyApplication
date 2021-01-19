@@ -39,7 +39,6 @@ class CateGoryActivity :
     override fun initView() {
         mDataBinding!!.tabMode.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(p0: TabLayout.Tab?) {
-//                mDataBinding!!.setVariable(BR.vmCateGoryActivity,mViewModel!!.currentCategory.value!!)
                 mViewModel.getCategoryTab(mViewModel!!.brotherCategory.value!!.get(p0!!.position).id.toString())
                 id = p0!!.position
             }

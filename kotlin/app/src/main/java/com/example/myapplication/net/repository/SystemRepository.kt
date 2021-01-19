@@ -68,6 +68,30 @@ class SystemRepository {
         serviceApi.getCategoryList(id)
     }
 
+    suspend fun getDetails(id: String) = withContext(Dispatchers.IO){
+        serviceApi.getDetails(id)
+    }
+
+    suspend fun getRelated(id: String) = withContext(Dispatchers.IO){
+        serviceApi.getRelated(id)
+    }
+
+
+    /**
+     * 登录接口
+     */
+    suspend fun login(username:String,password:String) = withContext(Dispatchers.IO){
+        serviceApi.login(username,password)
+    }
+
+    /**
+     * 购物车数据获取
+     */
+    suspend fun getCar() = withContext(Dispatchers.IO){
+        serviceApi.getCar()
+    }
+
+
 
 //    /**
 //     * 获取专题数据

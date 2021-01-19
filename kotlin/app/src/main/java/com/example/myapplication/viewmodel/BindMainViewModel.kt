@@ -28,7 +28,7 @@ class BindMainViewModel : BaseViewModel(Injection.repository) {
         fragment.add(HomeFragment())
         fragment.add(TopicFragment())
         fragment.add(SortFragment())
-        fragment.add(ShopFragment())
+        fragment.add(ShopFragment.instance)
         fragment.add(MeFragment())
     }
 

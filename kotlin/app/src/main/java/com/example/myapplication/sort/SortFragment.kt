@@ -17,6 +17,7 @@ import com.example.myapplication.databinding.FragmentSortBinding
 import com.example.myapplication.home.CateGoryActivity
 import com.example.myapplication.viewmodel.BindSortViewModel
 import com.shop.base.BaseFragment
+import com.shop.ui.main.home.adapter.MarqueeAdapter
 import kotlinx.android.synthetic.main.fragment_sort.*
 import q.rorbin.verticaltablayout.VerticalTabLayout.OnTabSelectedListener
 import q.rorbin.verticaltablayout.adapter.TabAdapter
@@ -83,6 +84,8 @@ class SortFragment : BaseFragment<BindSortViewModel,FragmentSortBinding>(R.layou
             }
         })
 
+
+
         //竖导航列表详情数据
         mViewModel.sortDataList.observe(this, Observer {
             sortDataList.clear()
@@ -122,6 +125,18 @@ class SortFragment : BaseFragment<BindSortViewModel,FragmentSortBinding>(R.layou
         }
 
     }
+
+//    //实现跑马灯效果
+//    private fun initMarquee(currentCategory: List<SubCategory>) {
+//        val marqueeViewListOf = mutableListOf<String>()
+//
+//        for (i in currentCategory.indices) {
+//            val name = catalogDataList.get(i).name
+//            marqueeViewListOf.add(name)
+//        }
+//        val marqueeAdapter = MarqueeAdapter(context, marqueeViewListOf)
+//        marquee_item.setAdapter(marqueeAdapter)
+//    }
 
     inner class ItemClick:IItemClick<SubCategory>{
         override fun itemClick(data: SubCategory) {

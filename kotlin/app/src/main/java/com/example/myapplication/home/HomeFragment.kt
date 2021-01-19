@@ -4,6 +4,7 @@ package com.example.myapplication.home
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
+import android.util.SparseArray
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.bumptech.glide.Glide
 import com.example.myapplication.R
 import com.example.myapplication.adapter.home.*
+import com.example.myapplication.base.IItemClick
 import com.example.myapplication.data.*
 import com.example.myapplication.databinding.FragmentHomeBinding
 import com.example.myapplication.tongpao.HotActivity
@@ -83,7 +85,10 @@ class HomeFragment : BaseFragment<BindHomeViewModel, FragmentHomeBinding>(
                     2,
                     StaggeredGridLayoutManager.VERTICAL
                 )
-                var categoryListAdapter = CategoryListAdapter(context, item.goodsList)
+                var layouts = SparseArray<Int>()
+                layouts.put(R.layout.home_item_categorygoods,BR.vmGoods)
+
+                var categoryListAdapter = CategoryListAdapter(context, item.goodsList,layouts,ItemClick())
                 view!!.recy_category.adapter = categoryListAdapter
                 initCateGory(item.goodsList, categoryListAdapter)
                 view!!.setTag(item.goodsList)
@@ -190,7 +195,11 @@ class HomeFragment : BaseFragment<BindHomeViewModel, FragmentHomeBinding>(
                     val name: String = views.name
                     val i1 = url.indexOf("=")
                     val substring = url.substring(i1 + 1)
-                    Toast.makeText(context, name, Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, substring, Toast.LENGTH_LONG).show()
+                    var intent = Intent(context,CateGoryActivity::class.java)
+                    intent.putExtra("id",substring)
+                    intent.putExtra("name",name)
+                    startActivity(intent)
                 }
             }
         })
@@ -214,9 +223,19 @@ class HomeFragment : BaseFragment<BindHomeViewModel, FragmentHomeBinding>(
     }
 
     override fun initData() {
+
     }
 
     override fun initVariable() {
+    }
+
+    inner class ItemClick : IItemClick<Goods>{
+        override fun itemClick(data: Goods) {
+            var intent = Intent(context,CarActivity::class.java)
+            intent.putExtra("id",data.id.toString())
+            startActivity(intent)
+        }
+
     }
 
     inner class TitleClick{
@@ -237,7 +256,4 @@ class HomeFragment : BaseFragment<BindHomeViewModel, FragmentHomeBinding>(
             startActivity(Intent(context, HotActivity::class.java))
         }
     }
-
-
-
 }

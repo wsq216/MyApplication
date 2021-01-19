@@ -4,33 +4,28 @@
 
     <data>
         <variable
-            name="vmGoods"
-            type="com.example.myapplication.data.Goods"/>
-        <variable
-            name="vmGodosClick"
-            type="com.example.myapplication.base.IItemClick" />
+            name="vmCarGoods"
+            type="com.example.myapplication.adapter.car.Goods" />
     </data>
 
     <LinearLayout
         android:orientation="vertical"
         android:id="@+id/liner"
         android:gravity="center"
-        android:layout_width="@dimen/dp_200"
-        android:layout_height="@dimen/dp_250"
-        android:onClick="@{(view)->vmGodosClick.itemClick(view.tag)}">
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_250">
 
         <ImageView
-            android:layout_width="@dimen/dp_180"
-            android:layout_height="@dimen/dp_180"
-            android:background="#F4F0F0"
+            android:layout_width="@dimen/dp_150"
+            android:layout_height="@dimen/dp_150"
             android:src="@mipmap/ic_menu_me_nor"
-            bind:imageUrl="@{vmGoods.list_pic_url}"
-            android:id="@+id/new_pic_url"></ImageView>
+            android:id="@+id/new_pic_url"
+            bind:imageUrl="@{vmCarGoods.list_pic_url}"></ImageView>
 
         <TextView
             android:layout_width="@dimen/dp_150"
             android:layout_height="wrap_content"
-            android:text="@{vmGoods.name}"
+            android:text="@{vmCarGoods.name}"
             android:singleLine="true"
             android:maxEms="10"
             android:layout_margin="@dimen/dp_8"
@@ -41,12 +36,10 @@
         <TextView
             android:layout_width="@dimen/dp_150"
             android:layout_height="wrap_content"
-            android:text="@{vmGoods.retail_price}"
-            android:textColor="#E60F0F"
+            android:text="@{vmCarGoods.retail_price}"
             android:gravity="center"
+            android:textColor="#E60F0F"
             android:textSize="@dimen/sp_10"
             android:id="@+id/floor_price" />
-
-
     </LinearLayout>
 </layout>

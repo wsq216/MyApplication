@@ -84,4 +84,7 @@ dependencies {
 
     //竖导航
     implementation "q.rorbin:VerticalTabLayout:1.2.5"
+
+    //跑马灯
+    implementation 'com.xj.marqueeView:marqueeView:0.1.20'
 }

@@ -1,0 +1,425 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="vmCarActivity"
+            type="com.example.myapplication.adapter.car.Info" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/layout_shop"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <com.youth.banner.Banner
+                    android:id="@+id/banner"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_400" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#D5D5D5"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/dp_5"
+                        android:layout_weight="1"
+                        android:drawableLeft="@mipmap/yuan"
+                        android:gravity="center"
+                        android:text="30天无忧退货"
+                        android:textSize="@dimen/sp_12" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/dp_5"
+                        android:layout_weight="1"
+                        android:drawableLeft="@mipmap/yuan"
+                        android:gravity="center"
+                        android:text="48小时快速退款"
+                        android:textSize="@dimen/sp_12" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/dp_5"
+                        android:layout_weight="1"
+                        android:drawableLeft="@mipmap/yuan"
+                        android:gravity="center"
+                        android:text="满88元免邮费"
+                        android:textSize="@dimen/sp_12" />
+                </LinearLayout>
+                <!--商品信息-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_200"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@{vmCarActivity.name}"
+                        android:textSize="@dimen/sp_20" />
+
+                    <TextView
+                        android:id="@+id/goods_brief"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@{vmCarActivity.goods_brief}"
+                        android:textColor="#B1AEAE"
+                        android:textSize="@dimen/sp_12" />
+
+                    <TextView
+                        android:id="@+id/retail_price"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp_20"
+                        android:gravity="center"
+                        android:text="@{vmCarActivity.retail_price}"
+                        android:textColor="@color/red"
+                        android:textSize="@dimen/sp_18" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_2"
+                    android:background="#CDCBCB" />
+                <!--数量选择区域-->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/details_num"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_40">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dp_20"
+                        android:gravity="center"
+                        android:text="@string/title_car_specs"
+                        android:textSize="@dimen/sp_16"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/dp_20"
+                        android:src="@mipmap/ic_arrow_rt"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_5"
+                    android:background="@color/gray_word" />
+                <!--商品评论区域-->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/txt_assess"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dp_20"
+                        android:gravity="center"
+                        android:text="@string/title_car_assess"
+                        android:textSize="@dimen/sp_20"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/dp_20"
+                        android:drawableRight="@mipmap/ic_arrow_rt"
+                        android:gravity="center"
+                        android:text="@string/title_car_lookall"
+                        android:textSize="@dimen/sp_20"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_15"
+                    android:layout_marginRight="@dimen/dp_15"
+                    android:orientation="vertical">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:id="@+id/img_comment_hot"
+                            android:layout_width="@dimen/dp_50"
+                            android:layout_height="@dimen/dp_50"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/txt_comment_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/dp_50"
+                            android:gravity="center_vertical"
+                            android:text="名字"
+                            android:textSize="@dimen/sp_12"
+                            app:layout_constraintLeft_toRightOf="@+id/img_comment_hot"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/txt_comment_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/dp_50"
+                            android:gravity="center_vertical"
+                            android:text="时间"
+                            android:textSize="@dimen/sp_12"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <TextView
+                        android:id="@+id/txt_comment_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp_15"
+                        android:layout_marginBottom="@dimen/dp_15"
+                        android:gravity="center_vertical"
+                        android:text="内容"
+                        android:textSize="@dimen/sp_12" />
+
+                    <LinearLayout
+                        android:id="@+id/linear_comment_img"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_1"
+                    android:layout_marginLeft="@dimen/dp_20"
+                    android:layout_marginTop="@dimen/dp_5"
+                    android:background="@color/gray_word" />
+                <!--评论内容-->
+
+                <!--商品参数区域-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/dp_15"
+                        android:text="商品参数"
+                        android:textSize="@dimen/sp_20" />
+
+                    <LinearLayout
+                        android:id="@+id/linear_attribute"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dp_15"
+                        android:layout_marginRight="@dimen/dp_15"
+                        android:layout_marginBottom="@dimen/dp_15"
+                        android:orientation="vertical">
+
+                    </LinearLayout>
+                </LinearLayout>
+                <!--商品详情区域-->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:ignore="WebViewLayout">
+
+                    <WebView
+                        android:id="@+id/webView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toTopOf="parent"></WebView>
+                    <!--                    <androidx.recyclerview.widget.RecyclerView-->
+                    <!--                        app:layout_constraintTop_toTopOf="parent"-->
+                    <!--                        android:layout_width="match_parent"-->
+                    <!--                        android:layout_height="match_parent"-->
+                    <!--                        android:id="@+id/rv_img" />-->
+                </androidx.constraintlayout.widget.ConstraintLayout>
+                <!--商品常见问题区域-->
+                <LinearLayout
+                    android:id="@+id/linear_common_problem"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp_10"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <View
+                            android:layout_width="@dimen/dp_30"
+                            android:layout_height="@dimen/dp_1"
+                            android:background="#aaa" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/dp_10"
+                            android:gravity="center"
+                            android:text="\t\t常见问题\t\t" />
+
+                        <View
+                            android:layout_width="@dimen/dp_30"
+                            android:layout_height="@dimen/dp_1"
+                            android:background="#aaa" />
+                    </LinearLayout>
+                </LinearLayout>
+                <!--大家都在看的商品区域-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <View
+                            android:layout_width="@dimen/dp_30"
+                            android:layout_height="@dimen/dp_1"
+                            android:background="#aaa" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/dp_10"
+                            android:gravity="center"
+                            android:text="\t\t大家都在看\t\t" />
+
+                        <View
+                            android:layout_width="@dimen/dp_30"
+                            android:layout_height="@dimen/dp_1"
+                            android:background="#aaa" />
+                    </LinearLayout>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/shape_details" />
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_shop"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_60"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/scrollView">
+
+            <FrameLayout
+                android:id="@+id/layout_collect"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/layout_car">
+
+                <ImageView
+                    android:id="@+id/img_collect"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:src="@mipmap/ic_collect_normal" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/layout_car"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                app:layout_constraintLeft_toRightOf="@id/layout_collect"
+                app:layout_constraintRight_toLeftOf="@id/txt_buy">
+
+                <ImageView
+                    android:id="@+id/img_car"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@mipmap/ic_car" />
+
+                <TextView
+                    android:id="@+id/txt_number"
+                    android:layout_width="@dimen/sp_15"
+                    android:layout_height="@dimen/sp_15"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:layout_marginBottom="@dimen/dp_10"
+                    android:background="@drawable/shape_car_number"
+                    android:gravity="center"
+                    android:text="11"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sp_8" />
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/txt_buy"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="立即购买"
+                android:textSize="@dimen/sp_18"
+                app:layout_constraintLeft_toRightOf="@id/layout_car"
+                app:layout_constraintRight_toLeftOf="@id/txt_addCar" />
+
+            <TextView
+                android:id="@+id/txt_addCar"
+                android:layout_width="@dimen/dp_130"
+                android:layout_height="match_parent"
+                android:background="@color/red"
+                android:gravity="center"
+                android:text="加入购物车"
+                android:textColor="@color/white"
+                android:textSize="@dimen/sp_18"
+                app:layout_constraintLeft_toRightOf="@id/txt_buy"
+                app:layout_constraintRight_toRightOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

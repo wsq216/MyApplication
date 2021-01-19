@@ -13,7 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".home.CateGoryActivity"></activity>
+        <activity android:name=".home.CarActivity"></activity>
+        <activity android:name=".home.CateGoryActivity" />
         <activity android:name=".tongpao.HotActivity" />
         <activity android:name=".home.NewGoodsActivity" />
         <activity android:name=".home.BrandActivity" />
